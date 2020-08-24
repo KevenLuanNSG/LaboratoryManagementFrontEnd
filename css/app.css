@@ -1,0 +1,79 @@
+body{
+    background: url("..//view/images/planoDeFunco.jpg") no-repeat center top  fixed;
+    height: 100%;
+    width: 100%;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    top: 0;
+}
+
+
+.nav-pills .nav-link {
+    border-radius: 0rem;
+    background-color: white;
+}
+
+#navFunction .nav-link{
+    color:white;
+    background-color: rgb(107, 106, 106);
+}
+
+#navFunction .nav-link.active {
+    color: white;
+    background-color: #003a77;
+}
+
+
+.jumbotron {
+    width: 80%;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.form-control {
+    margin-bottom: 5px;
+}
+
+.selecionado {
+    background-color: yellow;
+}
+
+.negrito {
+    font-weight: bold;
+}
+
+hr {
+    border-color: #999;
+}
+
+#buttonRealizarVenda {
+    margin-bottom: 15px;
+}
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+
+

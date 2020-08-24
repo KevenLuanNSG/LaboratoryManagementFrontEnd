@@ -1,0 +1,730 @@
+<div ng-controller="vendaCtrl">
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('realizarVenda', 'realizarVenda')">Realizar Venda</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendas', 'visualizarVendas'); viewVendasInicio(); visualizarVendas()">Vendas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendasPorCliente', 'visualizarVendasPorCliente')">Vendas por Cliente</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="viewSelecionado == 'visualizarVendas'">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendas', 'visualizarVendas'); viewVendasInicio(); visualizarVendas()">Vendas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendasDoDia', 'visualizarVendas'); hoje = gerarHoje();">Vendas
+                    do Dia</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendasPorPeriodo', 'visualizarVendas'); hoje = gerarHoje();">Vendas por
+                    Periodo</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="navFunction"
+            ng-show="viewSelecionado == 'visualizarVendasPorCliente'">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendasPorCliente', 'visualizarVendasPorCliente')">Vendas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendasDoDiaPorCliente', 'visualizarVendasPorCliente'); hoje = gerarHoje();">Vendas
+                    do Dia</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('vendasPorPeriodoPorCliente', 'visualizarVendasPorCliente'); hoje = gerarHoje();">Vendas
+                    por Periodo</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="jumbotron" ng-show="vendas.length == 0 && viewPagina == 'vendas'">
+        <div class="alert alert-danger"> Não foi encontrado nenhuma venda!</div>
+    </div>
+    <div class="jumbotron" ng-show="vendas.length > 0 && viewPagina == 'vendas'" id="vendas">
+        <h4>Vendas</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Valor</th>
+                    <th>Cliente</th>
+                    <th>CPF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="venda in vendas">
+                    <td>{{venda.id}}</td>
+                    <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{venda.date | date: 'HH:mm:ss'}}</td>
+                    <td>{{venda.valor | currency}}</td>
+                    <td>{{venda.cliente.id}}</td>
+                    <td>{{venda.cliente.cpf | cpfFilter}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row lanc-list-pagination">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li ng-class="{ 'disabled': paginationFirstVendas}" class="page-item">
+                        <button type="button" ng-disabled="paginationFirstVendas"
+                            ng-click="viewPageNavigationAnteriorVendas()" class="page-link">Anterior</button>
+                    </li>
+                    <li ng-repeat="viewPageVendas in paginationVendas"
+                        ng-class="{'active':pageVendas == viewPageVendas}" class="page-item">
+                        <a class="page-link" ng-click="viewPageNavigationVendas(viewPageVendas)">{{viewPageVendas}}</a>
+                    </li>
+                    <li ng-class="{ 'disabled': paginationLastVendas}" class="page-item">
+                        <button type="button" ng-disabled="paginationLastVendas"
+                            ng-click="viewPageNavigationProximaVendas()" class="page-link">Próxima</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="viewPagina == 'vendasDoDia'">
+        <form name="vendasDoDiaForm">
+            <input class="form-control" type="date" ng-model="date" name="date" required="true" max="{{hoje}}" />
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="viewVendasDoDiaInicio(); visualizarVendasDoDia(date)"
+            ng-disabled="vendasDoDiaForm.$invalid">Visualizar Vendas</button>
+        <div ng-show="vendasDoDiaForm.date.$invalid && vendasDoDiaForm.date.$dirty" class="alert alert-danger">
+            Data superior a data atual!
+        </div>
+        <div ng-show="vendasDoDia.length == 0 && viewPagina == 'vendasDoDia'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
+        </div>
+        <div ng-show="vendasDoDia.length > 0 && viewPagina == 'vendasDoDia'">
+            <h4>Vendas do dia {{dateVendasDoDia | date: 'dd/MM/yyyy'}}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Valor</th>
+                        <th>Cliente</th>
+                        <th>CPF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="venda in vendasDoDia">
+                        <td>{{venda.id}}</td>
+                        <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{venda.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{venda.valor | currency}}</td>
+                        <td>{{venda.cliente.id}}</td>
+                        <td>{{venda.cliente.cpf | cpfFilter}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': paginationFirstVendasDoDia}" class="page-item">
+                            <button type="button" ng-disabled="paginationFirstVendasDoDia"
+                                ng-click="viewPageNavigationAnteriorVendasDoDia()" class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageVendasDoDia in paginationVendasDoDia"
+                            ng-class="{'active':pageVendasDoDia == viewPageVendasDoDia}" class="page-item">
+                            <a class="page-link"
+                                ng-click="viewPageNavigationVendasDoDia(viewPageVendasDoDia)">{{viewPageVendasDoDia}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': paginationLastVendasDoDia}" class="page-item">
+                            <button type="button" ng-disabled="paginationLastVendasDoDia"
+                                ng-click="viewPageNavigationProximaVendasDoDia()" class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="viewPagina == 'vendasPorPeriodo'">
+        <form name="vendasPorPeriodoForm">
+            <input class="form-control" type="date" ng-model="dateStart" name="dateStart" required="true"
+                max="{{hoje}}" />
+            <input class="form-control" type="date" ng-model="dateEnd" name="dateEnd" required="true" max="{{hoje}}" />
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="viewVendasPorPeriodoInicio(); visualizarVendasPorPeriodo(dateStart, dateEnd)"
+            ng-disabled="vendasPorPeriodoForm.$invalid">Visualizar Vendas</button>
+        <div ng-show="vendasPorPeriodoForm.dateStart.$invalid && vendasPorPeriodoForm.dateStart.$dirty"
+            class="alert alert-danger">
+            Data de inicio superior a data atual!
+        </div>
+        <div ng-show="vendasPorPeriodoForm.dateEnd.$invalid && vendasPorPeriodoForm.dateEnd.$dirty"
+            class="alert alert-danger">
+            Data de final superior a data atual!
+        </div>
+        <div ng-show="vendasPorPeriodo.length == 0 && viewPagina == 'vendasPorPeriodo'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
+        </div>
+        <div ng-show="vendasPorPeriodo.length > 0 && viewPagina == 'vendasPorPeriodo'">
+            <h4>Vendas a partir do dia {{dateStartVendasPorPeriodo | date: 'dd/MM/yyyy'}} até o dia
+                {{dateEndVendasPorPeriodo | date: 'dd/MM/yyyy'}}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Valor</th>
+                        <th>Cliente</th>
+                        <th>CPF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="venda in vendasPorPeriodo">
+                        <td>{{venda.id}}</td>
+                        <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{venda.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{venda.valor | currency}}</td>
+                        <td>{{venda.cliente.id}}</td>
+                        <td>{{venda.cliente.cpf | cpfFilter}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': paginationFirstVendasPorPeriodo}" class="page-item">
+                            <button type="button" ng-disabled="paginationFirstVendasPorPeriodo"
+                                ng-click="viewPageNavigationAnteriorVendasPorPeriodo()"
+                                class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageVendasPorPeriodo in paginationVendasPorPeriodo"
+                            ng-class="{'active':pageVendasPorPeriodo == viewPageVendasPorPeriodo}" class="page-item">
+                            <a class="page-link"
+                                ng-click="viewPageNavigationVendasPorPeriodo(viewPageVendasPorPeriodo)">{{viewPageVendasPorPeriodo}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': paginationLastVendasPorPeriodo}" class="page-item">
+                            <button type="button" ng-disabled="paginationLastVendasPorPeriodo"
+                                ng-click="viewPageNavigationProximaVendasPorPeriodo()"
+                                class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="viewPagina == 'vendasPorCliente'">
+        <form name="vendasPorClienteForm">
+            <input class="form-control" type="text" ng-model="cpfVendasPorCliente" name="cpfVendasPorCliente"
+                placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/" required="true">
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="viewVendasPorClienteInicio(); viewVendasPorCliente(); visualizarVendasPorCliente(cpfVendasPorCliente)"
+            ng-disabled="vendasPorClienteForm.$invalid">Visualizar Vendas</button>
+        <div ng-show="vendasPorClienteForm.cpfVendasPorCliente.$invalid && vendasPorClienteForm.cpfVendasPorCliente.$dirty"
+            class="alert alert-danger">
+            CPF inválido!
+        </div>
+        <div ng-show="vendasPorCliente.length > 0 && viewPagina == 'vendasPorCliente'">
+            <h4>Vendas</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Valor</th>
+                        <th>Cliente</th>
+                        <th>CPF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="venda in vendasPorCliente">
+                        <td>{{venda.id}}</td>
+                        <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{venda.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{venda.valor | currency}}</td>
+                        <td>{{venda.cliente.id}}</td>
+                        <td>{{venda.cliente.cpf | cpfFilter}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': paginationFirstVendasPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="paginationFirstVendasPorCliente"
+                                ng-click="viewPageNavigationAnteriorVendasPorCliente()"
+                                class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageVendasPorCliente in paginationVendasPorCliente"
+                            ng-class="{'active':pageVendasPorCliente == viewPageVendasPorCliente}" class="page-item">
+                            <a class="page-link"
+                                ng-click="viewPageNavigationVendasPorCliente(viewPageVendasPorCliente)">{{viewPageVendasPorCliente}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': paginationLastVendasPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="paginationLastVendasPorCliente"
+                                ng-click="viewPageNavigationProximaVendasPorCliente()"
+                                class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="viewPagina == 'vendasDoDiaPorCliente'">
+        <form name="vendasDoDiaPorClienteForm">
+            <input class="form-control" type="date" ng-model="date" name="date" required="true" max="{{hoje}}" />
+            <input class="form-control" type="text" ng-model="cpfVendasDoDiaPorCliente" name="cpfVendasDoDiaPorCliente"
+                placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/" required="true">
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="viewVendasDoDiaPorClienteInicio(); visualizarVendasDoDiaPorCliente(date, cpfVendasDoDiaPorCliente)"
+            ng-disabled="vendasDoDiaPorClienteForm.$invalid">Visualizar Vendas</button>
+        <div ng-show="vendasDoDiaPorClienteForm.date.$invalid && vendasDoDiaPorClienteForm.date.$dirty"
+            class="alert alert-danger">
+            Data superior a data atual!
+        </div>
+        <div ng-show="vendasDoDiaPorClienteForm.cpfVendasDoDiaPorCliente.$invalid && vendasDoDiaPorClienteForm.cpfVendasDoDiaPorCliente.$dirty"
+            class="alert alert-danger">
+            CPF inválido!
+        </div>
+        <div ng-show="vendasDoDiaPorCliente.length == 0 && viewPagina == 'vendasDoDiaPorCliente'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
+        </div>
+        <div ng-show="vendasDoDiaPorCliente.length > 0 && viewPagina == 'vendasDoDiaPorCliente'">
+            <h4>Vendas do dia {{dateVendasDoDiaPorCliente | date: 'dd/MM/yyyy'}}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Valor</th>
+                        <th>Cliente</th>
+                        <th>CPF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="venda in vendasDoDiaPorCliente">
+                        <td>{{venda.id}}</td>
+                        <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{venda.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{venda.valor | currency}}</td>
+                        <td>{{venda.cliente.id}}</td>
+                        <td>{{venda.cliente.cpf | cpfFilter}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': paginationFirstVendasDoDiaPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="paginationFirstVendasDoDiaPorCliente"
+                                ng-click="viewPageNavigationAnteriorVendasDoDiaPorCliente()"
+                                class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageVendasDoDiaPorCliente in paginationVendasDoDiaPorCliente"
+                            ng-class="{'active':pageVendasDoDiaPorCliente == viewPageVendasDoDiaPorCliente}"
+                            class="page-item">
+                            <a class="page-link"
+                                ng-click="viewPageNavigationVendasDoDiaPorCliente(viewPageVendasDoDiaPorCliente)">{{viewPageVendasDoDiaPorCliente}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': paginationLastVendasDoDiaPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="paginationLastVendasDoDiaPorCliente"
+                                ng-click="viewPageNavigationProximaVendasDoDiaPorCliente()"
+                                class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="viewPagina == 'vendasPorPeriodoPorCliente'">
+        <form name="vendasPorPeriodoPorClienteForm">
+            <input class="form-control" type="date" ng-model="dateStart" name="dateStart" required="true"
+                max="{{hoje}}" />
+
+            <input class="form-control" type="date" ng-model="dateEnd" name="dateEnd" required="true" max="{{hoje}}" />
+
+            <input class="form-control" type="text" ng-model="cpfVendasPorPeriodoPorCliente"
+                name="cpfVendasPorPeriodoPorCliente" placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/"
+                required="true">
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="viewVendasPorPeriodoPorClienteInicio(); visualizarVendasPorPeriodoPorCliente(dateStart, dateEnd, cpfVendasPorPeriodoPorCliente)"
+            ng-disabled="vendasPorPeriodoPorClienteForm.$invalid">Visualizar Vendas</button>
+        <div ng-show="vendasPorPeriodoPorClienteForm.dateStart.$invalid && vendasPorPeriodoPorClienteForm.dateStart.$dirty"
+            class="alert alert-danger">
+            Data de inicio superior a data atual!
+        </div>
+        <div ng-show="vendasPorPeriodoPorClienteForm.dateEnd.$invalid && vendasPorPeriodoPorClienteForm.dateEnd.$dirty"
+            class="alert alert-danger">
+            Data de final superior a data atual!
+        </div>
+        <div ng-show="vendasPorPeriodoPorClienteForm.cpfVendasPorPeriodoPorCliente.$invalid && vendasPorPeriodoPorClienteForm.cpfVendasPorPeriodoPorCliente.$dirty"
+            class="alert alert-danger">
+            CPF inválido!
+        </div>
+        <div ng-show="vendasPorPeriodoPorCliente.length == 0 && viewPagina == 'vendasPorPeriodoPorCliente'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
+        </div>
+        <div ng-show="vendasPorPeriodoPorCliente.length > 0 && viewPagina == 'vendasPorPeriodoPorCliente'">
+            <h4>Vendas a partir do dia {{dateStartVendasPorPeriodoPorCliente | date: 'dd/MM/yyyy'}} até o dia
+                {{dateEndVendasPorPeriodoPorCliente | date: 'dd/MM/yyyy'}}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Valor</th>
+                        <th>Cliente</th>
+                        <th>CPF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="venda in vendasPorPeriodoPorCliente">
+                        <td>{{venda.id}}</td>
+                        <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{venda.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{venda.valor | currency}}</td>
+                        <td>{{venda.cliente.id}}</td>
+                        <td>{{venda.cliente.cpf | cpfFilter}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': paginationFirstVendasPorPeriodoPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="paginationFirstVendasPorPeriodoPorCliente"
+                                ng-click="viewPageNavigationAnteriorVendasPorPeriodoPorCliente()"
+                                class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageVendasPorPeriodoPorCliente in paginationVendasPorPeriodoPorCliente"
+                            ng-class="{'active':pageVendasPorPeriodoPorCliente == viewPageVendasPorPeriodoPorCliente}"
+                            class="page-item">
+                            <a class="page-link"
+                                ng-click="viewPageNavigationVendasPorPeriodoPorCliente(viewPageVendasPorPeriodoPorCliente)">{{viewPageVendasPorPeriodoPorCliente}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': paginationLastVendasPorPeriodoPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="paginationLastVendasPorPeriodoPorCliente"
+                                ng-click="viewPageNavigationProximaVendasPorPeriodoPorCliente()"
+                                class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" id="realizarVenda" ng-show="viewPagina == 'realizarVenda'">
+        <h4>Realizar Venda</h4>
+        <form name="vendaFormRealizar">
+            <input class="form-control" type="text" ng-model="venda.cliente.cpf" name="cliente"
+                placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/">
+            <button style="margin: 10px 0px;" class="btn btn-success btn-block"
+                ng-click="viewSelecionarProdutos(); viewSelecionarTipoDoProduto('')">Opções de Produtos</button>
+            <div ng-show="selecionarProdutos" style="margin-bottom: 15px;">
+                <button class="btn btn-success btn-sm"
+                    ng-click="viewSelecionarTipoDoProduto('Lanches')">Lanches</button>
+                <button class="btn btn-success btn-sm"
+                    ng-click="viewSelecionarTipoDoProduto('Bebidas')">Bebidas</button>
+                <button class="btn btn-success btn-sm" ng-click="viewSelecionarTipoDoProduto('Combos')">Combos</button>
+                <button class="btn btn-success btn-sm" ng-click="viewSelecionarTipoDoProduto('Doces')">Doces</button>
+                <button class="btn btn-success btn-sm"
+                    ng-click="viewSelecionarTipoDoProduto('Chocolates')">Chocolates</button>
+                <button class="btn btn-success btn-sm"
+                    ng-click="viewSelecionarTipoDoProduto('Sorvetes')">Sorvetes</button>
+            </div>
+
+            <div ng-show="selecionarTipoDoProduto == 'Lanches'">
+                <select class="form-control custom-select mr-sm-2" ng-model="lanche"
+                    ng-options="lanche.nome for lanche in lanches | filter: {disponivel: 'true'}">
+                    <option value="">Selecione um lanche</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarLanche(lanche); carregarValorVenda(); lanche = null"
+                    ng-disabled="lanche == null">Adicionar
+                    Lanche</button>
+            </div>
+            <div ng-show="selecionarTipoDoProduto == 'Bebidas'">
+                <select class="form-control custom-select mr-sm-2" ng-model="bebida"
+                    ng-options="bebida.nome for bebida in bebidas | filter: {disponivel: 'true'}">
+                    <option value="">Selecione uma bebida produzida aqui</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarBebida(bebida); carregarValorVenda(); bebida = null"
+                    ng-disabled="bebida == null">Adicionar
+                    Bebida</button>
+
+                <select class="form-control custom-select mr-sm-2" ng-model="bebidaInd"
+                    ng-options="bebidaInd.nome for bebidaInd in bebidasInd | filter: {disponivel: 'true'}">
+                    <option value="">Selecione uma bebida comercializada</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarBebidaInd(bebidaInd); carregarValorVenda(); bebidaInd = null"
+                    ng-disabled="bebidaInd == null">Adicionar
+                    Bebida</button>
+            </div>
+
+            <div ng-show="selecionarTipoDoProduto == 'Chocolates'">
+                <select class="form-control custom-select mr-sm-2" ng-model="chocolate"
+                    ng-options="chocolate.nome for chocolate in chocolates | filter: {disponivel: 'true'}">
+                    <option value="">Selecione um chocolate</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarChocolate(chocolate); carregarValorVenda(); chocolate = null"
+                    ng-disabled="chocolate == null">Adicionar
+                    Chocolate</button>
+            </div>
+
+            <div ng-show="selecionarTipoDoProduto == 'Doces'">
+                <select class="form-control custom-select mr-sm-2" ng-model="doce"
+                    ng-options="doce.nome for doce in doces | filter: {disponivel: 'true'}">
+                    <option value="">Selecione um doce</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarDoce(doce); carregarValorVenda(); doce = null"
+                    ng-disabled="doce == null">Adicionar
+                    Doce</button>
+            </div>
+
+            <div ng-show="selecionarTipoDoProduto == 'Sorvetes'">
+                <select class="form-control custom-select mr-sm-2" ng-model="sorvete"
+                    ng-options="sorvete.nome for sorvete in sorvetes | filter: {disponivel: 'true'}">
+                    <option value="">Selecione um sorvete</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarSorvete(sorvete); carregarValorVenda(); sorvete = null"
+                    ng-disabled="sorvete == null">Adicionar
+                    Sorvete</button>
+            </div>
+
+            <div ng-show="selecionarTipoDoProduto == 'Combos'">
+                <select class="form-control custom-select mr-sm-2" ng-model="combo"
+                    ng-options="combo.nome for combo in combos | filter: {disponivel: 'true'}">
+                    <option value="">Selecione um combo</option>
+                </select>
+                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
+                    ng-click="adicionarCombo(combo); carregarValorVenda(); combo = null"
+                    ng-disabled="combo == null">Adicionar
+                    Combo</button>
+            </div>
+
+        </form>
+
+        <table class="table"
+            ng-show="produtoList.length != 0 || produtoIndependenteList.length != 0 || comboList.length != 0">
+            <tr>
+                <th>
+                    <center>Preço</center>
+                </th>
+                <th>
+                    <center>Nome</center>
+                </th>
+                <th>
+                    <center>Tipo</center>
+                </th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="produtoSelecionado in produtoList | orderBy:'-tipoProduto' track by $index ">
+                <td>
+                    <center>
+                        <h3><span class="badge badge-success">{{produtoSelecionado.preco | currency}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <h3><span class="badge badge-secondary">{{produtoSelecionado.nome}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <h3><span class="badge badge-secondary">{{produtoSelecionado.tipoProduto}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center><button class="btn btn-danger btn-sm"
+                            ng-click="removerProduto($index);  carregarValorVenda();">Remover
+                            Produto</button></center>
+                </td>
+            </tr>
+            <tr ng-repeat="produtoIndSelecionado in produtoIndependenteList | orderBy: 'tipoProduto' track by $index">
+                <td>
+                    <center>
+                        <h3><span class="badge badge-success">{{produtoIndSelecionado.preco | currency}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <h3><span class="badge badge-secondary">{{produtoIndSelecionado.nome}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <h3><span class="badge badge-secondary">{{produtoIndSelecionado.tipoProduto}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center><button class="btn btn-danger btn-sm"
+                            ng-click="removerProdutoIndependente($index);  carregarValorVenda();">Remover
+                            Produto</button></center>
+                </td>
+            </tr>
+            <tr ng-repeat="combo in comboList track by $index">
+                <td>
+                    <center>
+                        <h3><span class="badge badge-success">{{combo.preco | currency}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <h3><span class="badge badge-secondary">{{combo.nome}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <h3><span class="badge badge-secondary">{{combo.tipoProduto}}</span></h3>
+                    </center>
+                </td>
+                <td>
+                    <center><button class="btn btn-danger btn-sm"
+                            ng-click="removerCombo($index);  carregarValorVenda();">Remover
+                            Combo</button></center>
+                </td>
+            </tr>
+        </table>
+
+        <h3><span class="badge badge-secondary" ng-show="valorVenda > 0">Valor total da venda:
+                {{valorVenda | currency}}</span></h3>
+        <button id="buttonRealizarVenda" class="btn btn-primary btn-block"
+            ng-click="venda.valor = valorVenda; realizarVenda(venda)"
+            ng-disabled="vendaFormRealizar.$invalid || (produtoList.length == 0 && produtoIndependenteList.length == 0 && comboList.length == 0)">Realizar
+            Venda</button>
+        <div ng-show="showVendaRealizada">
+            <h3><span class="badge badge-secondary">Venda</span></h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{vendaRealizada.id}}</td>
+                        <td>{{vendaRealizada.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{vendaRealizada.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{vendaRealizada.valor | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3><span class="badge badge-secondary">Cliente</span></h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Total Gasto</th>
+                        <th>Compras</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{vendaRealizada.cliente.id}}</td>
+                        <td>{{vendaRealizada.cliente.nome}}</td>
+                        <td>{{vendaRealizada.cliente.cpf | cpfFilter}}</td>
+                        <td>{{vendaRealizada.cliente.totalGasto | currency}}</td>
+                        <td>{{vendaRealizada.cliente.quantidadeCompras}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3><span class="badge badge-secondary">Produtos Vendidos</span></h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Preco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Lanche'} track by $index">
+                        <td>{{itemVendido.produtoId}}</td>
+                        <td>{{itemVendido.nome}}</td>
+                        <td>{{itemVendido.tipo}}</td>
+                        <td>{{itemVendido.preco | currency}}</td>
+                    </tr>
+                    <tr
+                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Bebida'} track by $index">
+                        <td>{{itemVendido.produtoId}}</td>
+                        <td>{{itemVendido.nome}}</td>
+                        <td>{{itemVendido.tipo}}</td>
+                        <td>{{itemVendido.preco | currency}}</td>
+                    </tr>
+                    <tr
+                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Combo'} track by $index">
+                        <td>{{itemVendido.produtoId}}</td>
+                        <td>{{itemVendido.nome}}</td>
+                        <td>{{itemVendido.tipo}}</td>
+                        <td>{{itemVendido.preco | currency}}</td>
+                    </tr>
+                    <tr
+                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Chocolate'} track by $index">
+                        <td>{{itemVendido.produtoId}}</td>
+                        <td>{{itemVendido.nome}}</td>
+                        <td>{{itemVendido.tipo}}</td>
+                        <td>{{itemVendido.preco | currency}}</td>
+                    </tr>
+                    <tr
+                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Doce'} track by $index">
+                        <td>{{itemVendido.produtoId}}</td>
+                        <td>{{itemVendido.nome}}</td>
+                        <td>{{itemVendido.tipo}}</td>
+                        <td>{{itemVendido.preco | currency}}</td>
+                    </tr>
+                    <tr
+                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Sorvete'} track by $index">
+                        <td>{{itemVendido.produtoId}}</td>
+                        <td>{{itemVendido.nome}}</td>
+                        <td>{{itemVendido.tipo}}</td>
+                        <td>{{itemVendido.preco | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

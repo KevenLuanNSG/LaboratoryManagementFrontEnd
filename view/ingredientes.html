@@ -1,0 +1,397 @@
+<div ng-controller="ingredienteCtrl">
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('ingredientes', 'ingredientes'); viewIngredientesInicio(); carregarIngredientes()">Ingredientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('ingredientesLimite', 'ingredientesLimite'); viewIngredientesLimiteInicio(); carregarIngredientesLimite()">Ingredientes
+                    no Limite</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('ingredientesZerados', 'ingredientesZerados'); viewIngredientesZeradosInicio(); carregarIngredientesZerados()">Ingredientes
+                    Zerados</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="viewSelecionado == 'ingredientes'">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('cadastrar', 'ingredientes')">Cadastrar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('comprar', 'ingredientes')">Comprar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('darBaixa', 'ingredientes')">Dar Baixa</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('atualizarNome', 'ingredientes')">Atualizar Nome</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="selecionarView('atualizarQuantidadeMinima', 'ingredientes')">Atualizar Quantidade
+                    Mínima</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="jumbotron" ng-show="ingredientes.length == 0 && viewPagina == 'ingredientes'">
+        <div class="alert alert-danger"> Não foi encontrado nenhum ingrediente!</div>
+    </div>
+    <div class="jumbotron" ng-show="ingredientes.length > 0 && viewPagina == 'ingredientes'" id="ingredientes">
+        <h4>Ingredientes</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="ingrediente in ingredientes">
+                    <td>{{ingrediente.id}}</td>
+                    <td>{{ingrediente.nome}}</td>
+                    <td>{{ingrediente.quantidade}}</td>
+                    <td>{{ingrediente.quantidadeMinima}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row lanc-list-pagination">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li ng-class="{ 'disabled': paginationIngredientesFirst}" class="page-item">
+                        <button type="button" ng-disabled="paginationIngredientesFirst"
+                            ng-click="viewPageNavigationIngredientesAnterior()" class="page-link">Anterior</button>
+                    </li>
+                    <li ng-repeat="viewPageIngredientes in paginationIngredientes"
+                        ng-class="{'active':pageIngredientes == viewPageIngredientes}" class="page-item">
+                        <a class="page-link"
+                            ng-click="viewPageNavigationIngredientes(viewPageIngredientes)">{{viewPageIngredientes}}</a>
+                    </li>
+                    <li ng-class="{ 'disabled': paginationIngredientesLast}" class="page-item">
+                        <button type="button" ng-disabled="paginationIngredientesLast"
+                            ng-click="viewPageNavigationIngredientesProxima()" class="page-link">Próxima</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="jumbotron" id="cadastrarIngrediente" ng-show="viewPagina == 'cadastrar'">
+        <h4>Cadastrar Ingrediente</h4>
+        <form name="ingredienteFormCadastrar">
+            <input class="form-control" type="text" ng-model="ingrediente.nome" name="nome"
+                placeholder="Nome do Ingrediente" ng-pattern="/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/"
+                ng-required="true">
+            <input class="form-control" type="text" ng-model="ingrediente.quantidade" name="quantidade"
+                placeholder="Quantidade" number-only="." ng-required="true" />
+            <input class="form-control" type="text" ng-model="ingrediente.quantidadeMinima" name="quantidadeMinima"
+                placeholder="Quantidade Mínima" number-only="." ng-required="true" />
+        </form>
+
+        <button style="margin-bottom: 15px;" id="buttonCadastrar" class="btn btn-primary btn-block"
+            ng-click="cadastrarIngrediente(ingrediente)" ng-disabled="ingredienteFormCadastrar.$invalid">Cadastrar
+            Ingrediente</button>
+
+        <div ng-show="ingredienteFormCadastrar.nome.$invalid && ingredienteFormCadastrar.nome.$dirty"
+            class="alert alert-danger">
+            Nome Inválido
+        </div>
+        <div ng-show="ingredienteFormCadastrar.quantidade.$invalid && ingredienteFormCadastrar.quantidade.$dirty"
+            class="alert alert-danger">
+            Quantidade Inválida
+        </div>
+        <div ng-show="ingredienteFormCadastrar.quantidadeMinima.$invalid && ingredienteFormCadastrar.quantidadeMinima.$dirty"
+            class="alert alert-danger">
+            Quantidade Mínima Inválida
+        </div>
+        <table class="table" ng-show="showIngredienteCadastrado">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ingredienteCadastrado.id}}</td>
+                    <td>{{ingredienteCadastrado.nome}}</td>
+                    <td>{{ingredienteCadastrado.quantidade}}</td>
+                    <td>{{ingredienteCadastrado.quantidadeMinima}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jumbotron" id="comprarIngrediente" ng-show="viewPagina == 'comprar'">
+        <h4>Comprar Ingrediente</h4>
+        <form name="ingredienteFormComprar">
+            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+                placeholder="ID do Ingrediente" ng-pattern="/^[0-9]*$/" ng-required="true" />
+            <input class="form-control" type="text" ng-model="quantidade" name="quantidade"
+                placeholder="Quantidade da compra" number-only="." ng-required="true" />
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="comprarIngrediente(ingredienteId, quantidade)"
+            ng-disabled="ingredienteFormComprar.$invalid">Comprar Ingrediente</button>
+        <div ng-show="ingredienteFormComprar.ingredienteId.$invalid && ingredienteFormComprar.ingredienteId.$dirty"
+            class="alert alert-danger">
+            ID Inválido
+        </div>
+        <div ng-show="ingredienteFormComprar.quantidade.$invalid && ingredienteFormComprar.quantidade.$dirty"
+            class="alert alert-danger">
+            Quantidade Inválida
+        </div>
+        <table class="table" ng-show="showIngredienteComprado">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ingredienteComprado.id}}</td>
+                    <td>{{ingredienteComprado.nome}}</td>
+                    <td>{{ingredienteComprado.quantidade}}</td>
+                    <td>{{ingredienteComprado.quantidadeMinima}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jumbotron" id="darBaixa" ng-show="viewPagina == 'darBaixa'">
+        <h4>Dar Baixa</h4>
+        <form name="ingredienteFormDarBaixa">
+            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+                placeholder="ID do Ingrediente" ng-pattern="/^[0-9]*$/" ng-required="true" />
+            <input class="form-control" type="text" ng-model="quantidade" name="quantidade"
+                placeholder="Quantidade da baixa" number-only="." ng-required="true" />
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="darBaixa(ingredienteId, quantidade)" ng-disabled="ingredienteFormDarBaixa.$invalid">Dar
+            Baixa</button>
+        <div ng-show="ingredienteFormDarBaixa.ingredienteId.$invalid && ingredienteFormDarBaixa.ingredienteId.$dirty"
+            class="alert alert-danger">
+            ID Inválido
+        </div>
+        <div ng-show="ingredienteFormDarBaixa.quantidade.$invalid && ingredienteFormDarBaixa.quantidade.$dirty"
+            class="alert alert-danger">
+            Quantidade Inválida
+        </div>
+        <table class="table" ng-show="showIngredientePerdido">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ingredientePerdido.id}}</td>
+                    <td>{{ingredientePerdido.nome}}</td>
+                    <td>{{ingredientePerdido.quantidade}}</td>
+                    <td>{{ingredientePerdido.quantidadeMinima}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jumbotron" id="atualizarNome" ng-show="viewPagina == 'atualizarNome'">
+        <h4>Atualizar Nome</h4>
+        <form name="ingredienteFormAtualizarNome">
+            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+                placeholder="ID do Ingrediente" ng-pattern="/^[0-9]*$/" ng-required="true" />
+            <input class="form-control" type="text" ng-model="nome" name="nome" placeholder="Novo Nome"
+                ng-pattern="/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/" ng-required="true" />
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="atualizarNome(ingredienteId, nome)" ng-disabled="ingredienteFormAtualizarNome.$invalid">Atualizar
+            Nome</button>
+        <div ng-show="ingredienteFormAtualizarNome.ingredienteId.$invalid && ingredienteFormAtualizarNome.ingredienteId.$dirty"
+            class="alert alert-danger">
+            ID Inválido
+        </div>
+        <div ng-show="ingredienteFormAtualizarNome.nome.$invalid && ingredienteFormAtualizarNome.nome.$dirty"
+            class="alert alert-danger">
+            Nome Inválido
+        </div>
+        <table class="table" ng-show="showIngredienteNomeAtualizado">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ingredienteNomeAtualizado.id}}</td>
+                    <td>{{ingredienteNomeAtualizado.nome}}</td>
+                    <td>{{ingredienteNomeAtualizado.quantidade}}</td>
+                    <td>{{ingredienteNomeAtualizado.quantidadeMinima}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jumbotron" id="atualizarQuantidadeMinima" ng-show="viewPagina == 'atualizarQuantidadeMinima'">
+        <h4>Atualizar Quantidade Minima</h4>
+        <form name="ingredienteFormAtualizarQuantidadeMinima">
+            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+                placeholder="ID do Ingrediente" ng-pattern="/^[0-9]*$/" ng-required="true" />
+            <input class="form-control" type="text" ng-model="quantidadeMinima" name="quantidadeMinima"
+                placeholder="Quantidade Minima" number-only="." ng-required="true" />
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="atualizarQuantidadeMinima(ingredienteId, quantidadeMinima)"
+            ng-disabled="ingredienteFormAtualizarQuantidadeMinima.$invalid">Atualizar</button>
+        <div ng-show="ingredienteFormAtualizarQuantidadeMinima.ingredienteId.$invalid && ingredienteFormAtualizarQuantidadeMinima.ingredienteId.$dirty"
+            class="alert alert-danger">
+            ID Inválido
+        </div>
+        <div ng-show="ingredienteFormAtualizarQuantidadeMinima.quantidadeMinima.$invalid && ingredienteFormAtualizarQuantidadeMinima.quantidadeMinima.$dirty"
+            class="alert alert-danger">
+            Nome Inválido
+        </div>
+        <table class="table" ng-show="showIngredienteQuantidadeMinimaAtualizada">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ingredienteQuantidadeMinimaAtualizada.id}}</td>
+                    <td>{{ingredienteQuantidadeMinimaAtualizada.nome}}</td>
+                    <td>{{ingredienteQuantidadeMinimaAtualizada.quantidade}}</td>
+                    <td>{{ingredienteQuantidadeMinimaAtualizada.quantidadeMinima}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="jumbotron" ng-show="ingredientesLimite.length == 0 && viewPagina == 'ingredientesLimite'">
+        <div class="alert alert-danger"> Não foi encontrado nenhum ingrediente!</div>
+    </div>
+    <div class="jumbotron" ng-show="ingredientesLimite.length > 0 && viewPagina == 'ingredientesLimite'"
+        id="ingredientesLimite">
+        <h4>Ingredientes</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="ingrediente in ingredientesLimite">
+                    <td>{{ingrediente.id}}</td>
+                    <td>{{ingrediente.nome}}</td>
+                    <td>{{ingrediente.quantidade}}</td>
+                    <td>{{ingrediente.quantidadeMinima}}</td>
+                    <td><button type="button" class="btn btn-success btn-sm" ng-click="viewComprar()">Comprar
+                        </button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row lanc-list-pagination">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li ng-class="{ 'disabled': paginationIngredientesLimiteFirst}" class="page-item">
+                        <button type="button" ng-disabled="paginationIngredientesLimiteFirst"
+                            ng-click="viewPageNavigationIngredientesLimiteAnterior()"
+                            class="page-link">Anterior</button>
+                    </li>
+                    <li ng-repeat="viewPageIngredientesLimite in paginationIngredientesLimite"
+                        ng-class="{'active':pageIngredientesLimite == viewPageIngredientesLimite}" class="page-item">
+                        <a class="page-link"
+                            ng-click="viewPageNavigationIngredientesLimite(viewPageIngredientesLimite)">{{viewPageIngredientesLimite}}</a>
+                    </li>
+                    <li ng-class="{ 'disabled': paginationIngredientesLimiteLast}" class="page-item">
+                        <button type="button" ng-disabled="paginationIngredientesLimiteLast"
+                            ng-click="viewPageNavigationIngredientesLimiteProxima()" class="page-link">Próxima</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="ingredientesZerados.length == 0 && viewPagina == 'ingredientesZerados'">
+        <div class="alert alert-danger"> Não foi encontrado nenhum ingrediente!</div>
+    </div>
+    <div class="jumbotron" ng-show="ingredientesZerados.length > 0 && viewPagina == 'ingredientesZerados'"
+        id="ingredientesZerados">
+        <h4>Ingredientes</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Quantidade Mínima</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="ingrediente in ingredientesZerados">
+                    <td>{{ingrediente.id}}</td>
+                    <td>{{ingrediente.nome}}</td>
+                    <td>{{ingrediente.quantidade}}</td>
+                    <td>{{ingrediente.quantidadeMinima}}</td>
+                    <td><button type="button" class="btn btn-success btn-sm" ng-click="viewComprar()">Comprar
+                        </button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row lanc-list-pagination">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li ng-class="{ 'disabled': paginationIngredientesZeradosFirst}" class="page-item">
+                        <button type="button" ng-disabled="paginationIngredientesZeradosFirst"
+                            ng-click="viewPageNavigationIngredientesZeradosAnterior()"
+                            class="page-link">Anterior</button>
+                    </li>
+                    <li ng-repeat="viewPageIngredientesZerados in paginationIngredientesZerados"
+                        ng-class="{'active':pageIngredientesZerados == viewPageIngredientesZerados}" class="page-item">
+                        <a class="page-link"
+                            ng-click="viewPageNavigationIngredientesZerados(viewPageIngredientesZerados)">{{viewPageIngredientesZerados}}</a>
+                    </li>
+                    <li ng-class="{ 'disabled': paginationIngredientesZeradosLast}" class="page-item">
+                        <button type="button" ng-disabled="paginationIngredientesZeradosLast"
+                            ng-click="viewPageNavigationIngredientesZeradosProxima()" class="page-link">Próxima</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
