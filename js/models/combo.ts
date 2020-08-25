@@ -1,0 +1,3 @@
+interface Combo {
+    id:number;
+}

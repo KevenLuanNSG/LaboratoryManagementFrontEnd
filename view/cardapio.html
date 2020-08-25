@@ -1,35 +1,35 @@
-<div ng-controller="cardapioCtrl">
+<div ng-controller="CardapioCtrl as ctrl">
     <div>
         <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('cardapio')">Cardapio
+                    ng-click="ctrl.selecionarView('cardapio')">Cardapio
                     Completo</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('lanches')">Lanches</a>
+                    ng-click="ctrl.selecionarView('lanches')">Lanches</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('bebidas')">Bebidas</a>
+                    ng-click="ctrl.selecionarView('bebidas')">Bebidas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('combos')">Combos</a>
+                    ng-click="ctrl.selecionarView('combos')">Combos</a>
             </li>
         </ul>
     </div>
 
     <div class="jumbotron"
-        ng-show="todasBebidas[0].length == 0 && todasBebidas[1].length == 0 && lanches.length == 0 && combos.length == 0 && viewSelecionado == 'cardapio'">
+        ng-show="ctrl.todasBebidas.length == 0 && ctrl.lanches.length == 0 && ctrl.combos.length == 0 && ctrl.viewSelecionado == 'cardapio'">
         <div class="alert alert-danger"> Não foi encontrado nenhum produto no cardapio!</div>
     </div>
-    <div class="jumbotron" ng-show="lanches.length == 0 && viewSelecionado == 'lanches'">
+    <div class="jumbotron" ng-show="ctrl.lanches.length == 0 && ctrl.viewSelecionado == 'lanches'">
         <div class="alert alert-danger"> Não foi encontrado nenhum lanche!</div>
     </div>
     <div class="jumbotron"
-        ng-show="lanches.length > 0 && (viewSelecionado == 'lanches' || viewSelecionado == 'cardapio')" id="lanches">
+        ng-show="ctrl.lanches.length > 0 && (ctrl.viewSelecionado == 'lanches' || ctrl.viewSelecionado == 'cardapio')" id="lanches">
         <h4>Lanches</h4>
         <table class="table">
             <thead>
@@ -43,7 +43,7 @@
             </thead>
 
             <tbody>
-                <tr ng-repeat="lanche in lanches">
+                <tr ng-repeat="lanche in ctrl.lanches">
                     <td>{{lanche.id}}</td>
                     <td>{{lanche.nome}}</td>
                     <td>{{lanche.tipoProduto}}</td>
@@ -52,7 +52,7 @@
                     <td>
                         <center><button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#modalIngredientesLanche"
-                                ng-click="carregarFazerProduto(lanche.id)">Ingredientes</button></center>
+                                ng-click="ctrl.carregarFazerProduto(lanche.id)">Ingredientes</button></center>
                     </td>
                     <div class="modal fade" id="modalIngredientesLanche" tabindex="-1" role="dialog"
                         aria-labelledby="modalLabelIngredientesLanche" aria-hidden="true">
@@ -64,7 +64,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body" ng-repeat="ingrediente in fazerProduto">
+                                <div class="modal-body" ng-repeat="ingrediente in ctrl.fazerProduto">
                                     <div>
                                         <span class="badge badge-primary">Id: {{ingrediente.ingrediente.id}}</span>
                                         <span class="badge badge-success">Ingrediente:
@@ -85,11 +85,11 @@
     </div>
 
     <div class="jumbotron"
-        ng-show="todasBebidas[0].length == 0 && todasBebidas[1].length == 0 && viewSelecionado == 'bebidas'">
+        ng-show="ctrl.todasBebidas.length == 0 && ctrl.viewSelecionado == 'bebidas'">
         <div class="alert alert-danger"> Não foi encontrado nenhuma bebida!</div>
     </div>
     <div class="jumbotron"
-        ng-show="(todasBebidas[0].length > 0 || todasBebidas[1].length > 0) && (viewSelecionado == 'bebidas' || viewSelecionado == 'cardapio')"
+        ng-show="(ctrl.todasBebidas.length > 0) && (ctrl.viewSelecionado == 'bebidas' || ctrl.viewSelecionado == 'cardapio')"
         id="todasBebidas">
         <h4>Bebidas</h4>
         <table class="table">
@@ -102,7 +102,7 @@
                     <th>Preço</th>
                 </tr>
             </thead>
-            <tbody ng-repeat="bebidas in todasBebidas">
+            <tbody ng-repeat="bebidas in ctrl.todasBebidas">
                 <tr ng-repeat="bebida in bebidas">
                     <td>{{bebida.id}}</td>
                     <td>{{bebida.nome}}</td>
@@ -116,7 +116,7 @@
                             <button ng-show="bebida.ingredienteList != null" type="button"
                                 class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#modalIngredientesBebida"
-                                ng-click="carregarFazerProduto(bebida.id)">Ingredientes</button></center>
+                                ng-click="ctrl.carregarFazerProduto(bebida.id)">Ingredientes</button></center>
                     </td>
                     <div class="modal fade" id="modalIngredientesBebida" tabindex="-1" role="dialog"
                         aria-labelledby="modalLabelIngredientesBebida" aria-hidden="true">
@@ -128,7 +128,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body" ng-repeat="ingrediente in fazerProduto">
+                                <div class="modal-body" ng-repeat="ingrediente in ctrl.fazerProduto">
                                     <div>
                                         <span class="badge badge-primary">Id: {{ingrediente.ingrediente.id}}</span>
                                         <span class="badge badge-success">Ingrediente:
@@ -148,10 +148,10 @@
         </table>
     </div>
 
-    <div class="jumbotron" ng-show="combos.length == 0 && viewSelecionado == 'combos'">
+    <div class="jumbotron" ng-show="ctrl.combos.length == 0 && ctrl.viewSelecionado == 'combos'">
         <div class="alert alert-danger"> Não foi encontrado nenhum combo!</div>
     </div>
-    <div class="jumbotron" ng-show="combos.length > 0 && (viewSelecionado == 'combos' || viewSelecionado == 'cardapio')"
+    <div class="jumbotron" ng-show="ctrl.combos.length > 0 && (ctrl.viewSelecionado == 'combos' || ctrl.viewSelecionado == 'cardapio')"
         id="combos">
         <h4>Combos</h4>
         <table class="table">
@@ -165,7 +165,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="combo in combos">
+                <tr ng-repeat="combo in ctrl.combos">
                     <td>{{combo.id}}</td>
                     <td>{{combo.nome}}</td>
                     <td>{{combo.tipoProduto}}</td>
@@ -174,7 +174,7 @@
                     <td>
                         <center><button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#modalProdutosCombo"
-                                ng-click="viewProdutosCombo(combo.id)">Produtos</button></center>
+                                ng-click="ctrl.viewProdutosCombo(combo.id)">Produtos</button></center>
                     </td>
                     <div class="modal fade" id="modalProdutosCombo" tabindex="-1" role="dialog"
                         aria-labelledby="modalLabelProdutosCombo" aria-hidden="true">
@@ -186,8 +186,8 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body" ng-repeat="combo in combos">
-                                    <div ng-show="combo.id == viewProdutos" ng-repeat="produto in combo.produtoList">
+                                <div class="modal-body" ng-repeat="combo in ctrl.combos">
+                                    <div ng-show="combo.id == ctrl.viewProdutos" ng-repeat="produto in combo.produtoList">
                                         <span class="badge badge-primary">Id: {{produto.id}}</span>
                                         <span class="badge badge-success">Produto:
                                             {{produto.nome}}</span>
