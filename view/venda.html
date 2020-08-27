@@ -1,36 +1,38 @@
-<div ng-controller="vendaCtrl">
+<div ng-controller="VendaCtrl as ctrl">
 
     <div>
         <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('realizarVenda', 'realizarVenda')">Realizar Venda</a>
+                    ng-click="ctrl.selecionarView('realizarVenda', 'realizarVenda')">Realizar Venda</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendas', 'visualizarVendas'); viewVendasInicio(); visualizarVendas()">Vendas</a>
+                    ng-click="ctrl.selecionarView('vendas', 'visualizarVendas'); ctrl.viewVendasInicio(); ctrl.visualizarVendas()">Vendas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendasPorCliente', 'visualizarVendasPorCliente')">Vendas por Cliente</a>
+                    ng-click="ctrl.selecionarView('vendasPorCliente', 'visualizarVendasPorCliente')">Vendas por
+                    Cliente</a>
             </li>
         </ul>
     </div>
 
     <div>
-        <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="viewSelecionado == 'visualizarVendas'">
+        <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="ctrl.viewSelecionado == 'visualizarVendas'">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendas', 'visualizarVendas'); viewVendasInicio(); visualizarVendas()">Vendas</a>
+                    ng-click="ctrl.selecionarView('vendas', 'visualizarVendas'); ctrl.viewVendasInicio(); ctrl.visualizarVendas()">Vendas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendasDoDia', 'visualizarVendas'); hoje = gerarHoje();">Vendas
+                    ng-click="ctrl.selecionarView('vendasDoDia', 'visualizarVendas'); hoje = ctrl.gerarHoje();">Vendas
                     do Dia</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendasPorPeriodo', 'visualizarVendas'); hoje = gerarHoje();">Vendas por
+                    ng-click="ctrl.selecionarView('vendasPorPeriodo', 'visualizarVendas'); hoje = ctrl.gerarHoje();">Vendas
+                    por
                     Periodo</a>
             </li>
         </ul>
@@ -38,28 +40,28 @@
 
     <div>
         <ul class="nav nav-pills nav-justified" id="navFunction"
-            ng-show="viewSelecionado == 'visualizarVendasPorCliente'">
+            ng-show="ctrl.viewSelecionado == 'visualizarVendasPorCliente'">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendasPorCliente', 'visualizarVendasPorCliente')">Vendas</a>
+                    ng-click="ctrl.selecionarView('vendasPorCliente', 'visualizarVendasPorCliente')">Vendas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendasDoDiaPorCliente', 'visualizarVendasPorCliente'); hoje = gerarHoje();">Vendas
+                    ng-click="ctrl.selecionarView('vendasDoDiaPorCliente', 'visualizarVendasPorCliente'); hoje = ctrl.gerarHoje();">Vendas
                     do Dia</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('vendasPorPeriodoPorCliente', 'visualizarVendasPorCliente'); hoje = gerarHoje();">Vendas
+                    ng-click="ctrl.selecionarView('vendasPorPeriodoPorCliente', 'visualizarVendasPorCliente'); hoje = ctrl.gerarHoje();">Vendas
                     por Periodo</a>
             </li>
         </ul>
     </div>
 
-    <div class="jumbotron" ng-show="vendas.length == 0 && viewPagina == 'vendas'">
+    <div class="jumbotron" ng-show="ctrl.vendas.length == 0 && ctrl.viewPagina == 'vendas'">
         <div class="alert alert-danger"> Não foi encontrado nenhuma venda!</div>
     </div>
-    <div class="jumbotron" ng-show="vendas.length > 0 && viewPagina == 'vendas'" id="vendas">
+    <div class="jumbotron" ng-show="ctrl.vendas.length > 0 && ctrl.viewPagina == 'vendas'" id="vendas">
         <h4>Vendas</h4>
         <table class="table">
             <thead>
@@ -73,7 +75,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="venda in vendas">
+                <tr ng-repeat="venda in ctrl.vendas">
                     <td>{{venda.id}}</td>
                     <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
                     <td>{{venda.date | date: 'HH:mm:ss'}}</td>
@@ -87,38 +89,39 @@
         <div class="row lanc-list-pagination">
             <nav aria-label="...">
                 <ul class="pagination">
-                    <li ng-class="{ 'disabled': paginationFirstVendas}" class="page-item">
-                        <button type="button" ng-disabled="paginationFirstVendas"
-                            ng-click="viewPageNavigationAnteriorVendas()" class="page-link">Anterior</button>
+                    <li ng-class="{ 'disabled': ctrl.paginationFirstVendas}" class="page-item">
+                        <button type="button" ng-disabled="ctrl.paginationFirstVendas"
+                            ng-click="ctrl.viewPageNavigationAnteriorVendas()" class="page-link">Anterior</button>
                     </li>
-                    <li ng-repeat="viewPageVendas in paginationVendas"
-                        ng-class="{'active':pageVendas == viewPageVendas}" class="page-item">
-                        <a class="page-link" ng-click="viewPageNavigationVendas(viewPageVendas)">{{viewPageVendas}}</a>
+                    <li ng-repeat="viewPageVendas in ctrl.paginationVendas"
+                        ng-class="{'active':ctrl.pageVendas == viewPageVendas}" class="page-item">
+                        <a class="page-link"
+                            ng-click="ctrl.viewPageNavigationVendas(viewPageVendas)">{{viewPageVendas}}</a>
                     </li>
-                    <li ng-class="{ 'disabled': paginationLastVendas}" class="page-item">
-                        <button type="button" ng-disabled="paginationLastVendas"
-                            ng-click="viewPageNavigationProximaVendas()" class="page-link">Próxima</button>
+                    <li ng-class="{ 'disabled': ctrl.paginationLastVendas}" class="page-item">
+                        <button type="button" ng-disabled="ctrl.paginationLastVendas"
+                            ng-click="ctrl.viewPageNavigationProximaVendas()" class="page-link">Próxima</button>
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
 
-    <div class="jumbotron" ng-show="viewPagina == 'vendasDoDia'">
+    <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasDoDia'">
         <form name="vendasDoDiaForm">
             <input class="form-control" type="date" ng-model="date" name="date" required="true" max="{{hoje}}" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="viewVendasDoDiaInicio(); visualizarVendasDoDia(date)"
+            ng-click="ctrl.viewVendasDoDiaInicio(); ctrl.visualizarVendasDoDia(date)"
             ng-disabled="vendasDoDiaForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasDoDiaForm.date.$invalid && vendasDoDiaForm.date.$dirty" class="alert alert-danger">
             Data superior a data atual!
         </div>
-        <div ng-show="vendasDoDia.length == 0 && viewPagina == 'vendasDoDia'">
+        <div ng-show="ctrl.vendasDoDia.length == 0 && ctrl.viewPagina == 'vendasDoDia'">
             <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
         </div>
-        <div ng-show="vendasDoDia.length > 0 && viewPagina == 'vendasDoDia'">
-            <h4>Vendas do dia {{dateVendasDoDia | date: 'dd/MM/yyyy'}}</h4>
+        <div ng-show="ctrl.vendasDoDia.length > 0 && ctrl.viewPagina == 'vendasDoDia'">
+            <h4>Vendas do dia {{ctrl.dateVendasDoDia | date: 'dd/MM/yyyy'}}</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -131,7 +134,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="venda in vendasDoDia">
+                    <tr ng-repeat="venda in ctrl.vendasDoDia">
                         <td>{{venda.id}}</td>
                         <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
                         <td>{{venda.date | date: 'HH:mm:ss'}}</td>
@@ -145,18 +148,20 @@
             <div class="row lanc-list-pagination">
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li ng-class="{ 'disabled': paginationFirstVendasDoDia}" class="page-item">
-                            <button type="button" ng-disabled="paginationFirstVendasDoDia"
-                                ng-click="viewPageNavigationAnteriorVendasDoDia()" class="page-link">Anterior</button>
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstVendasDoDia}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstVendasDoDia"
+                                ng-click="ctrl.viewPageNavigationAnteriorVendasDoDia()"
+                                class="page-link">Anterior</button>
                         </li>
-                        <li ng-repeat="viewPageVendasDoDia in paginationVendasDoDia"
-                            ng-class="{'active':pageVendasDoDia == viewPageVendasDoDia}" class="page-item">
+                        <li ng-repeat="viewPageVendasDoDia in ctrl.paginationVendasDoDia"
+                            ng-class="{'active':ctrl.pageVendasDoDia == viewPageVendasDoDia}" class="page-item">
                             <a class="page-link"
-                                ng-click="viewPageNavigationVendasDoDia(viewPageVendasDoDia)">{{viewPageVendasDoDia}}</a>
+                                ng-click="ctrl.viewPageNavigationVendasDoDia(viewPageVendasDoDia)">{{viewPageVendasDoDia}}</a>
                         </li>
-                        <li ng-class="{ 'disabled': paginationLastVendasDoDia}" class="page-item">
-                            <button type="button" ng-disabled="paginationLastVendasDoDia"
-                                ng-click="viewPageNavigationProximaVendasDoDia()" class="page-link">Próxima</button>
+                        <li ng-class="{ 'disabled': ctrl.paginationLastVendasDoDia}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastVendasDoDia"
+                                ng-click="ctrl.viewPageNavigationProximaVendasDoDia()"
+                                class="page-link">Próxima</button>
                         </li>
                     </ul>
                 </nav>
@@ -164,14 +169,14 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-show="viewPagina == 'vendasPorPeriodo'">
+    <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasPorPeriodo'">
         <form name="vendasPorPeriodoForm">
             <input class="form-control" type="date" ng-model="dateStart" name="dateStart" required="true"
                 max="{{hoje}}" />
             <input class="form-control" type="date" ng-model="dateEnd" name="dateEnd" required="true" max="{{hoje}}" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="viewVendasPorPeriodoInicio(); visualizarVendasPorPeriodo(dateStart, dateEnd)"
+            ng-click="ctrl.viewVendasPorPeriodoInicio(); ctrl.visualizarVendasPorPeriodo(dateStart, dateEnd)"
             ng-disabled="vendasPorPeriodoForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasPorPeriodoForm.dateStart.$invalid && vendasPorPeriodoForm.dateStart.$dirty"
             class="alert alert-danger">
@@ -181,12 +186,12 @@
             class="alert alert-danger">
             Data de final superior a data atual!
         </div>
-        <div ng-show="vendasPorPeriodo.length == 0 && viewPagina == 'vendasPorPeriodo'">
+        <div ng-show="ctrl.vendasPorPeriodo.length == 0 && ctrl.viewPagina == 'vendasPorPeriodo'">
             <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
         </div>
-        <div ng-show="vendasPorPeriodo.length > 0 && viewPagina == 'vendasPorPeriodo'">
-            <h4>Vendas a partir do dia {{dateStartVendasPorPeriodo | date: 'dd/MM/yyyy'}} até o dia
-                {{dateEndVendasPorPeriodo | date: 'dd/MM/yyyy'}}</h4>
+        <div ng-show="ctrl.vendasPorPeriodo.length > 0 && ctrl.viewPagina == 'vendasPorPeriodo'">
+            <h4>Vendas a partir do dia {{ctrl.dateStartVendasPorPeriodo | date: 'dd/MM/yyyy'}} até o dia
+                {{ctrl.dateEndVendasPorPeriodo | date: 'dd/MM/yyyy'}}</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -199,7 +204,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="venda in vendasPorPeriodo">
+                    <tr ng-repeat="venda in ctrl.vendasPorPeriodo">
                         <td>{{venda.id}}</td>
                         <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
                         <td>{{venda.date | date: 'HH:mm:ss'}}</td>
@@ -213,19 +218,20 @@
             <div class="row lanc-list-pagination">
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li ng-class="{ 'disabled': paginationFirstVendasPorPeriodo}" class="page-item">
-                            <button type="button" ng-disabled="paginationFirstVendasPorPeriodo"
-                                ng-click="viewPageNavigationAnteriorVendasPorPeriodo()"
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstVendasPorPeriodo}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstVendasPorPeriodo"
+                                ng-click="ctrl.viewPageNavigationAnteriorVendasPorPeriodo()"
                                 class="page-link">Anterior</button>
                         </li>
-                        <li ng-repeat="viewPageVendasPorPeriodo in paginationVendasPorPeriodo"
-                            ng-class="{'active':pageVendasPorPeriodo == viewPageVendasPorPeriodo}" class="page-item">
+                        <li ng-repeat="viewPageVendasPorPeriodo in ctrl.paginationVendasPorPeriodo"
+                            ng-class="{'active':ctrl.pageVendasPorPeriodo == viewPageVendasPorPeriodo}"
+                            class="page-item">
                             <a class="page-link"
-                                ng-click="viewPageNavigationVendasPorPeriodo(viewPageVendasPorPeriodo)">{{viewPageVendasPorPeriodo}}</a>
+                                ng-click="ctrl.viewPageNavigationVendasPorPeriodo(viewPageVendasPorPeriodo)">{{viewPageVendasPorPeriodo}}</a>
                         </li>
-                        <li ng-class="{ 'disabled': paginationLastVendasPorPeriodo}" class="page-item">
-                            <button type="button" ng-disabled="paginationLastVendasPorPeriodo"
-                                ng-click="viewPageNavigationProximaVendasPorPeriodo()"
+                        <li ng-class="{ 'disabled': ctrl.paginationLastVendasPorPeriodo}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastVendasPorPeriodo"
+                                ng-click="ctrl.viewPageNavigationProximaVendasPorPeriodo()"
                                 class="page-link">Próxima</button>
                         </li>
                     </ul>
@@ -234,19 +240,19 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-show="viewPagina == 'vendasPorCliente'">
+    <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasPorCliente'">
         <form name="vendasPorClienteForm">
             <input class="form-control" type="text" ng-model="cpfVendasPorCliente" name="cpfVendasPorCliente"
                 placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/" required="true">
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="viewVendasPorClienteInicio(); viewVendasPorCliente(); visualizarVendasPorCliente(cpfVendasPorCliente)"
+            ng-click="ctrl.viewVendasPorClienteInicio(); ctrl.viewVendasPorCliente(); ctrl.visualizarVendasPorCliente(cpfVendasPorCliente)"
             ng-disabled="vendasPorClienteForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasPorClienteForm.cpfVendasPorCliente.$invalid && vendasPorClienteForm.cpfVendasPorCliente.$dirty"
             class="alert alert-danger">
             CPF inválido!
         </div>
-        <div ng-show="vendasPorCliente.length > 0 && viewPagina == 'vendasPorCliente'">
+        <div ng-show="ctrl.vendasPorCliente.length > 0 && ctrl.viewPagina == 'vendasPorCliente'">
             <h4>Vendas</h4>
             <table class="table">
                 <thead>
@@ -260,7 +266,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="venda in vendasPorCliente">
+                    <tr ng-repeat="venda in ctrl.vendasPorCliente">
                         <td>{{venda.id}}</td>
                         <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
                         <td>{{venda.date | date: 'HH:mm:ss'}}</td>
@@ -274,19 +280,20 @@
             <div class="row lanc-list-pagination">
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li ng-class="{ 'disabled': paginationFirstVendasPorCliente}" class="page-item">
-                            <button type="button" ng-disabled="paginationFirstVendasPorCliente"
-                                ng-click="viewPageNavigationAnteriorVendasPorCliente()"
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstVendasPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstVendasPorCliente"
+                                ng-click="ctrl.viewPageNavigationAnteriorVendasPorCliente()"
                                 class="page-link">Anterior</button>
                         </li>
-                        <li ng-repeat="viewPageVendasPorCliente in paginationVendasPorCliente"
-                            ng-class="{'active':pageVendasPorCliente == viewPageVendasPorCliente}" class="page-item">
+                        <li ng-repeat="viewPageVendasPorCliente in ctrl.paginationVendasPorCliente"
+                            ng-class="{'active':ctrl.pageVendasPorCliente == viewPageVendasPorCliente}"
+                            class="page-item">
                             <a class="page-link"
-                                ng-click="viewPageNavigationVendasPorCliente(viewPageVendasPorCliente)">{{viewPageVendasPorCliente}}</a>
+                                ng-click="ctrl.viewPageNavigationVendasPorCliente(viewPageVendasPorCliente)">{{viewPageVendasPorCliente}}</a>
                         </li>
-                        <li ng-class="{ 'disabled': paginationLastVendasPorCliente}" class="page-item">
-                            <button type="button" ng-disabled="paginationLastVendasPorCliente"
-                                ng-click="viewPageNavigationProximaVendasPorCliente()"
+                        <li ng-class="{ 'disabled': ctrl.paginationLastVendasPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastVendasPorCliente"
+                                ng-click="ctrl.viewPageNavigationProximaVendasPorCliente()"
                                 class="page-link">Próxima</button>
                         </li>
                     </ul>
@@ -295,14 +302,14 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-show="viewPagina == 'vendasDoDiaPorCliente'">
+    <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasDoDiaPorCliente'">
         <form name="vendasDoDiaPorClienteForm">
             <input class="form-control" type="date" ng-model="date" name="date" required="true" max="{{hoje}}" />
             <input class="form-control" type="text" ng-model="cpfVendasDoDiaPorCliente" name="cpfVendasDoDiaPorCliente"
                 placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/" required="true">
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="viewVendasDoDiaPorClienteInicio(); visualizarVendasDoDiaPorCliente(date, cpfVendasDoDiaPorCliente)"
+            ng-click="ctrl.viewVendasDoDiaPorClienteInicio(); ctrl.visualizarVendasDoDiaPorCliente(date, cpfVendasDoDiaPorCliente)"
             ng-disabled="vendasDoDiaPorClienteForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasDoDiaPorClienteForm.date.$invalid && vendasDoDiaPorClienteForm.date.$dirty"
             class="alert alert-danger">
@@ -312,11 +319,11 @@
             class="alert alert-danger">
             CPF inválido!
         </div>
-        <div ng-show="vendasDoDiaPorCliente.length == 0 && viewPagina == 'vendasDoDiaPorCliente'">
+        <div ng-show="ctrl.vendasDoDiaPorCliente.length == 0 && ctrl.viewPagina == 'vendasDoDiaPorCliente'">
             <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
         </div>
-        <div ng-show="vendasDoDiaPorCliente.length > 0 && viewPagina == 'vendasDoDiaPorCliente'">
-            <h4>Vendas do dia {{dateVendasDoDiaPorCliente | date: 'dd/MM/yyyy'}}</h4>
+        <div ng-show="ctrl.vendasDoDiaPorCliente.length > 0 && ctrl.viewPagina == 'vendasDoDiaPorCliente'">
+            <h4>Vendas do dia {{ctrl.dateVendasDoDiaPorCliente | date: 'dd/MM/yyyy'}}</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -329,7 +336,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="venda in vendasDoDiaPorCliente">
+                    <tr ng-repeat="venda in ctrl.vendasDoDiaPorCliente">
                         <td>{{venda.id}}</td>
                         <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
                         <td>{{venda.date | date: 'HH:mm:ss'}}</td>
@@ -343,20 +350,20 @@
             <div class="row lanc-list-pagination">
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li ng-class="{ 'disabled': paginationFirstVendasDoDiaPorCliente}" class="page-item">
-                            <button type="button" ng-disabled="paginationFirstVendasDoDiaPorCliente"
-                                ng-click="viewPageNavigationAnteriorVendasDoDiaPorCliente()"
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstVendasDoDiaPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstVendasDoDiaPorCliente"
+                                ng-click="ctrl.viewPageNavigationAnteriorVendasDoDiaPorCliente()"
                                 class="page-link">Anterior</button>
                         </li>
-                        <li ng-repeat="viewPageVendasDoDiaPorCliente in paginationVendasDoDiaPorCliente"
-                            ng-class="{'active':pageVendasDoDiaPorCliente == viewPageVendasDoDiaPorCliente}"
+                        <li ng-repeat="viewPageVendasDoDiaPorCliente in ctrl.paginationVendasDoDiaPorCliente"
+                            ng-class="{'active':ctrl.pageVendasDoDiaPorCliente == viewPageVendasDoDiaPorCliente}"
                             class="page-item">
                             <a class="page-link"
-                                ng-click="viewPageNavigationVendasDoDiaPorCliente(viewPageVendasDoDiaPorCliente)">{{viewPageVendasDoDiaPorCliente}}</a>
+                                ng-click="ctrl.viewPageNavigationVendasDoDiaPorCliente(viewPageVendasDoDiaPorCliente)">{{viewPageVendasDoDiaPorCliente}}</a>
                         </li>
-                        <li ng-class="{ 'disabled': paginationLastVendasDoDiaPorCliente}" class="page-item">
-                            <button type="button" ng-disabled="paginationLastVendasDoDiaPorCliente"
-                                ng-click="viewPageNavigationProximaVendasDoDiaPorCliente()"
+                        <li ng-class="{ 'disabled': ctrl.paginationLastVendasDoDiaPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastVendasDoDiaPorCliente"
+                                ng-click="ctrl.viewPageNavigationProximaVendasDoDiaPorCliente()"
                                 class="page-link">Próxima</button>
                         </li>
                     </ul>
@@ -365,7 +372,7 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-show="viewPagina == 'vendasPorPeriodoPorCliente'">
+    <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasPorPeriodoPorCliente'">
         <form name="vendasPorPeriodoPorClienteForm">
             <input class="form-control" type="date" ng-model="dateStart" name="dateStart" required="true"
                 max="{{hoje}}" />
@@ -377,7 +384,7 @@
                 required="true">
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="viewVendasPorPeriodoPorClienteInicio(); visualizarVendasPorPeriodoPorCliente(dateStart, dateEnd, cpfVendasPorPeriodoPorCliente)"
+            ng-click="ctrl.viewVendasPorPeriodoPorClienteInicio(); ctrl.visualizarVendasPorPeriodoPorCliente(dateStart, dateEnd, cpfVendasPorPeriodoPorCliente)"
             ng-disabled="vendasPorPeriodoPorClienteForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasPorPeriodoPorClienteForm.dateStart.$invalid && vendasPorPeriodoPorClienteForm.dateStart.$dirty"
             class="alert alert-danger">
@@ -391,12 +398,12 @@
             class="alert alert-danger">
             CPF inválido!
         </div>
-        <div ng-show="vendasPorPeriodoPorCliente.length == 0 && viewPagina == 'vendasPorPeriodoPorCliente'">
+        <div ng-show="ctrl.vendasPorPeriodoPorCliente.length == 0 && ctrl.viewPagina == 'vendasPorPeriodoPorCliente'">
             <div class="alert alert-danger"> Não foi encontrado nenhuma venda neste dia!</div>
         </div>
-        <div ng-show="vendasPorPeriodoPorCliente.length > 0 && viewPagina == 'vendasPorPeriodoPorCliente'">
-            <h4>Vendas a partir do dia {{dateStartVendasPorPeriodoPorCliente | date: 'dd/MM/yyyy'}} até o dia
-                {{dateEndVendasPorPeriodoPorCliente | date: 'dd/MM/yyyy'}}</h4>
+        <div ng-show="ctrl.vendasPorPeriodoPorCliente.length > 0 && ctrl.viewPagina == 'vendasPorPeriodoPorCliente'">
+            <h4>Vendas a partir do dia {{ctrl.dateStartVendasPorPeriodoPorCliente | date: 'dd/MM/yyyy'}} até o dia
+                {{ctrl.dateEndVendasPorPeriodoPorCliente | date: 'dd/MM/yyyy'}}</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -409,7 +416,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="venda in vendasPorPeriodoPorCliente">
+                    <tr ng-repeat="venda in ctrl.vendasPorPeriodoPorCliente">
                         <td>{{venda.id}}</td>
                         <td>{{venda.date | date: 'dd/MM/yyyy'}}</td>
                         <td>{{venda.date | date: 'HH:mm:ss'}}</td>
@@ -423,20 +430,20 @@
             <div class="row lanc-list-pagination">
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li ng-class="{ 'disabled': paginationFirstVendasPorPeriodoPorCliente}" class="page-item">
-                            <button type="button" ng-disabled="paginationFirstVendasPorPeriodoPorCliente"
-                                ng-click="viewPageNavigationAnteriorVendasPorPeriodoPorCliente()"
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstVendasPorPeriodoPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstVendasPorPeriodoPorCliente"
+                                ng-click="ctrl.viewPageNavigationAnteriorVendasPorPeriodoPorCliente()"
                                 class="page-link">Anterior</button>
                         </li>
-                        <li ng-repeat="viewPageVendasPorPeriodoPorCliente in paginationVendasPorPeriodoPorCliente"
-                            ng-class="{'active':pageVendasPorPeriodoPorCliente == viewPageVendasPorPeriodoPorCliente}"
+                        <li ng-repeat="viewPageVendasPorPeriodoPorCliente in ctrl.paginationVendasPorPeriodoPorCliente"
+                            ng-class="{'active':ctrl.pageVendasPorPeriodoPorCliente == viewPageVendasPorPeriodoPorCliente}"
                             class="page-item">
                             <a class="page-link"
-                                ng-click="viewPageNavigationVendasPorPeriodoPorCliente(viewPageVendasPorPeriodoPorCliente)">{{viewPageVendasPorPeriodoPorCliente}}</a>
+                                ng-click="ctrl.viewPageNavigationVendasPorPeriodoPorCliente(viewPageVendasPorPeriodoPorCliente)">{{viewPageVendasPorPeriodoPorCliente}}</a>
                         </li>
-                        <li ng-class="{ 'disabled': paginationLastVendasPorPeriodoPorCliente}" class="page-item">
-                            <button type="button" ng-disabled="paginationLastVendasPorPeriodoPorCliente"
-                                ng-click="viewPageNavigationProximaVendasPorPeriodoPorCliente()"
+                        <li ng-class="{ 'disabled': ctrl.paginationLastVendasPorPeriodoPorCliente}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastVendasPorPeriodoPorCliente"
+                                ng-click="ctrl.viewPageNavigationProximaVendasPorPeriodoPorCliente()"
                                 class="page-link">Próxima</button>
                         </li>
                     </ul>
@@ -445,104 +452,107 @@
         </div>
     </div>
 
-    <div class="jumbotron" id="realizarVenda" ng-show="viewPagina == 'realizarVenda'">
+    <div class="jumbotron" id="realizarVenda" ng-show="ctrl.viewPagina == 'realizarVenda'">
         <h4>Realizar Venda</h4>
         <form name="vendaFormRealizar">
             <input class="form-control" type="text" ng-model="venda.cliente.cpf" name="cliente"
                 placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/">
             <button style="margin: 10px 0px;" class="btn btn-success btn-block"
-                ng-click="viewSelecionarProdutos(); viewSelecionarTipoDoProduto('')">Opções de Produtos</button>
-            <div ng-show="selecionarProdutos" style="margin-bottom: 15px;">
+                ng-click="ctrl.viewSelecionarProdutos(); ctrl.viewSelecionarTipoDoProduto('')">Opções de
+                Produtos</button>
+            <div ng-show="ctrl.selecionarProdutos" style="margin-bottom: 15px;">
                 <button class="btn btn-success btn-sm"
-                    ng-click="viewSelecionarTipoDoProduto('Lanches')">Lanches</button>
+                    ng-click="ctrl.viewSelecionarTipoDoProduto('Lanches')">Lanches</button>
                 <button class="btn btn-success btn-sm"
-                    ng-click="viewSelecionarTipoDoProduto('Bebidas')">Bebidas</button>
-                <button class="btn btn-success btn-sm" ng-click="viewSelecionarTipoDoProduto('Combos')">Combos</button>
-                <button class="btn btn-success btn-sm" ng-click="viewSelecionarTipoDoProduto('Doces')">Doces</button>
+                    ng-click="ctrl.viewSelecionarTipoDoProduto('Bebidas')">Bebidas</button>
                 <button class="btn btn-success btn-sm"
-                    ng-click="viewSelecionarTipoDoProduto('Chocolates')">Chocolates</button>
+                    ng-click="ctrl.viewSelecionarTipoDoProduto('Combos')">Combos</button>
                 <button class="btn btn-success btn-sm"
-                    ng-click="viewSelecionarTipoDoProduto('Sorvetes')">Sorvetes</button>
+                    ng-click="ctrl.viewSelecionarTipoDoProduto('Doces')">Doces</button>
+                <button class="btn btn-success btn-sm"
+                    ng-click="ctrl.viewSelecionarTipoDoProduto('Chocolates')">Chocolates</button>
+                <button class="btn btn-success btn-sm"
+                    ng-click="ctrl.viewSelecionarTipoDoProduto('Sorvetes')">Sorvetes</button>
             </div>
 
-            <div ng-show="selecionarTipoDoProduto == 'Lanches'">
+            <div ng-show="ctrl.selecionarTipoDoProduto == 'Lanches'">
                 <select class="form-control custom-select mr-sm-2" ng-model="lanche"
-                    ng-options="lanche.nome for lanche in lanches | filter: {disponivel: 'true'}">
+                    ng-options="lanche.nome for lanche in ctrl.lanches | filter: {disponivel: 'true'}">
                     <option value="">Selecione um lanche</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarLanche(lanche); carregarValorVenda(); lanche = null"
+                    ng-click="ctrl.adicionarLanche(lanche); ctrl.carregarValorVenda(); lanche = null"
                     ng-disabled="lanche == null">Adicionar
                     Lanche</button>
             </div>
-            <div ng-show="selecionarTipoDoProduto == 'Bebidas'">
+            <div ng-show="ctrl.selecionarTipoDoProduto == 'Bebidas'">
                 <select class="form-control custom-select mr-sm-2" ng-model="bebida"
-                    ng-options="bebida.nome for bebida in bebidas | filter: {disponivel: 'true'}">
+                    ng-options="bebida.nome for bebida in ctrl.bebidas | filter: {disponivel: 'true'}">
                     <option value="">Selecione uma bebida produzida aqui</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarBebida(bebida); carregarValorVenda(); bebida = null"
+                    ng-click="ctrl.adicionarBebida(bebida); ctrl.carregarValorVenda(); bebida = null"
                     ng-disabled="bebida == null">Adicionar
                     Bebida</button>
 
                 <select class="form-control custom-select mr-sm-2" ng-model="bebidaInd"
-                    ng-options="bebidaInd.nome for bebidaInd in bebidasInd | filter: {disponivel: 'true'}">
+                    ng-options="bebidaInd.nome for bebidaInd in ctrl.bebidasInd | filter: {disponivel: 'true'}">
                     <option value="">Selecione uma bebida comercializada</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarBebidaInd(bebidaInd); carregarValorVenda(); bebidaInd = null"
+                    ng-click="ctrl.adicionarBebidaInd(bebidaInd); ctrl.carregarValorVenda(); bebidaInd = null"
                     ng-disabled="bebidaInd == null">Adicionar
                     Bebida</button>
             </div>
 
-            <div ng-show="selecionarTipoDoProduto == 'Chocolates'">
+            <div ng-show="ctrl.selecionarTipoDoProduto == 'Chocolates'">
                 <select class="form-control custom-select mr-sm-2" ng-model="chocolate"
-                    ng-options="chocolate.nome for chocolate in chocolates | filter: {disponivel: 'true'}">
+                    ng-options="chocolate.nome for chocolate in ctrl.chocolates | filter: {disponivel: 'true'}">
                     <option value="">Selecione um chocolate</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarChocolate(chocolate); carregarValorVenda(); chocolate = null"
+                    ng-click="ctrl.adicionarChocolate(chocolate); ctrl.carregarValorVenda(); chocolate = null"
                     ng-disabled="chocolate == null">Adicionar
                     Chocolate</button>
             </div>
 
-            <div ng-show="selecionarTipoDoProduto == 'Doces'">
+            <div ng-show="ctrl.selecionarTipoDoProduto == 'Doces'">
                 <select class="form-control custom-select mr-sm-2" ng-model="doce"
-                    ng-options="doce.nome for doce in doces | filter: {disponivel: 'true'}">
+                    ng-options="doce.nome for doce in ctrl.doces | filter: {disponivel: 'true'}">
                     <option value="">Selecione um doce</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarDoce(doce); carregarValorVenda(); doce = null"
+                    ng-click="ctrl.adicionarDoce(doce); ctrl.carregarValorVenda(); doce = null"
                     ng-disabled="doce == null">Adicionar
                     Doce</button>
             </div>
 
-            <div ng-show="selecionarTipoDoProduto == 'Sorvetes'">
+            <div ng-show="ctrl.selecionarTipoDoProduto == 'Sorvetes'">
                 <select class="form-control custom-select mr-sm-2" ng-model="sorvete"
-                    ng-options="sorvete.nome for sorvete in sorvetes | filter: {disponivel: 'true'}">
+                    ng-options="sorvete.nome for sorvete in ctrl.sorvetes | filter: {disponivel: 'true'}">
                     <option value="">Selecione um sorvete</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarSorvete(sorvete); carregarValorVenda(); sorvete = null"
+                    ng-click="ctrl.adicionarSorvete(sorvete); ctrl.carregarValorVenda(); sorvete = null"
                     ng-disabled="sorvete == null">Adicionar
                     Sorvete</button>
             </div>
 
-            <div ng-show="selecionarTipoDoProduto == 'Combos'">
+            <div ng-show="ctrl.selecionarTipoDoProduto == 'Combos'">
                 <select class="form-control custom-select mr-sm-2" ng-model="combo"
-                    ng-options="combo.nome for combo in combos | filter: {disponivel: 'true'}">
+                    ng-options="combo.nome for combo in ctrl.combos | filter: {disponivel: 'true'}">
                     <option value="">Selecione um combo</option>
                 </select>
                 <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm"
-                    ng-click="adicionarCombo(combo); carregarValorVenda(); combo = null"
+                    ng-click="ctrl.adicionarCombo(combo); ctrl.carregarValorVenda(); combo = null"
                     ng-disabled="combo == null">Adicionar
                     Combo</button>
             </div>
 
         </form>
-
+        
         <table class="table"
-            ng-show="produtoList.length != 0 || produtoIndependenteList.length != 0 || comboList.length != 0">
+            ng-show="ctrl.produtoList.length != 0 || ctrl.produtoIndependenteList.length != 0 || ctrl.comboList.length != 0">
             <tr>
                 <th>
                     <center>Preço</center>
@@ -555,7 +565,7 @@
                 </th>
                 <th></th>
             </tr>
-            <tr ng-repeat="produtoSelecionado in produtoList | orderBy:'-tipoProduto' track by $index ">
+            <tr ng-repeat="produtoSelecionado in ctrl.produtoList | orderBy:'-tipoProduto' track by $index ">
                 <td>
                     <center>
                         <h3><span class="badge badge-success">{{produtoSelecionado.preco | currency}}</span></h3>
@@ -573,11 +583,12 @@
                 </td>
                 <td>
                     <center><button class="btn btn-danger btn-sm"
-                            ng-click="removerProduto($index);  carregarValorVenda();">Remover
+                            ng-click="ctrl.removerProduto($index); ctrl.carregarValorVenda();">Remover
                             Produto</button></center>
                 </td>
             </tr>
-            <tr ng-repeat="produtoIndSelecionado in produtoIndependenteList | orderBy: 'tipoProduto' track by $index">
+            <tr
+                ng-repeat="produtoIndSelecionado in ctrl.produtoIndependenteList | orderBy: 'tipoProduto' track by $index">
                 <td>
                     <center>
                         <h3><span class="badge badge-success">{{produtoIndSelecionado.preco | currency}}</span></h3>
@@ -595,11 +606,11 @@
                 </td>
                 <td>
                     <center><button class="btn btn-danger btn-sm"
-                            ng-click="removerProdutoIndependente($index);  carregarValorVenda();">Remover
+                            ng-click="ctrl.removerProdutoIndependente($index); ctrl.carregarValorVenda();">Remover
                             Produto</button></center>
                 </td>
             </tr>
-            <tr ng-repeat="combo in comboList track by $index">
+            <tr ng-repeat="combo in ctrl.comboList track by $index">
                 <td>
                     <center>
                         <h3><span class="badge badge-success">{{combo.preco | currency}}</span></h3>
@@ -617,19 +628,19 @@
                 </td>
                 <td>
                     <center><button class="btn btn-danger btn-sm"
-                            ng-click="removerCombo($index);  carregarValorVenda();">Remover
+                            ng-click="ctrl.removerCombo($index);  ctrl.carregarValorVenda();">Remover
                             Combo</button></center>
                 </td>
             </tr>
         </table>
 
-        <h3><span class="badge badge-secondary" ng-show="valorVenda > 0">Valor total da venda:
-                {{valorVenda | currency}}</span></h3>
+        <h3><span class="badge badge-secondary" ng-show="ctrl.valorVenda > 0">Valor total da venda:
+                {{ctrl.valorVenda | currency}}</span></h3>
         <button id="buttonRealizarVenda" class="btn btn-primary btn-block"
-            ng-click="venda.valor = valorVenda; realizarVenda(venda)"
-            ng-disabled="vendaFormRealizar.$invalid || (produtoList.length == 0 && produtoIndependenteList.length == 0 && comboList.length == 0)">Realizar
+            ng-click="venda.valor = ctrl.valorVenda; ctrl.realizarVenda(venda); venda = null"
+            ng-disabled="vendaFormRealizar.$invalid || (ctrl.produtoList.length == 0 && ctrl.produtoIndependenteList.length == 0 && ctrl.comboList.length == 0)">Realizar
             Venda</button>
-        <div ng-show="showVendaRealizada">
+        <div ng-show="ctrl.showVendaRealizada">
             <h3><span class="badge badge-secondary">Venda</span></h3>
             <table class="table">
                 <thead>
@@ -642,10 +653,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{vendaRealizada.id}}</td>
-                        <td>{{vendaRealizada.date | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{vendaRealizada.date | date: 'HH:mm:ss'}}</td>
-                        <td>{{vendaRealizada.valor | currency}}</td>
+                        <td>{{ctrl.vendaRealizada.id}}</td>
+                        <td>{{ctrl.vendaRealizada.date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{ctrl.vendaRealizada.date | date: 'HH:mm:ss'}}</td>
+                        <td>{{ctrl.vendaRealizada.valor | currency}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -662,11 +673,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{vendaRealizada.cliente.id}}</td>
-                        <td>{{vendaRealizada.cliente.nome}}</td>
-                        <td>{{vendaRealizada.cliente.cpf | cpfFilter}}</td>
-                        <td>{{vendaRealizada.cliente.totalGasto | currency}}</td>
-                        <td>{{vendaRealizada.cliente.quantidadeCompras}}</td>
+                        <td>{{ctrl.vendaRealizada.cliente.id}}</td>
+                        <td>{{ctrl.vendaRealizada.cliente.nome}}</td>
+                        <td>{{ctrl.vendaRealizada.cliente.cpf | cpfFilter}}</td>
+                        <td>{{ctrl.vendaRealizada.cliente.totalGasto | currency}}</td>
+                        <td>{{ctrl.vendaRealizada.cliente.quantidadeCompras}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -682,42 +693,42 @@
                 </thead>
                 <tbody>
                     <tr
-                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Lanche'} track by $index">
+                        ng-repeat="itemVendido in ctrl.vendaRealizada.itensVendidos | filter: {tipo : 'Lanche'} track by $index">
                         <td>{{itemVendido.produtoId}}</td>
                         <td>{{itemVendido.nome}}</td>
                         <td>{{itemVendido.tipo}}</td>
                         <td>{{itemVendido.preco | currency}}</td>
                     </tr>
                     <tr
-                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Bebida'} track by $index">
+                        ng-repeat="itemVendido in ctrl.vendaRealizada.itensVendidos | filter: {tipo : 'Bebida'} track by $index">
                         <td>{{itemVendido.produtoId}}</td>
                         <td>{{itemVendido.nome}}</td>
                         <td>{{itemVendido.tipo}}</td>
                         <td>{{itemVendido.preco | currency}}</td>
                     </tr>
                     <tr
-                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Combo'} track by $index">
+                        ng-repeat="itemVendido in ctrl.vendaRealizada.itensVendidos | filter: {tipo : 'Combo'} track by $index">
                         <td>{{itemVendido.produtoId}}</td>
                         <td>{{itemVendido.nome}}</td>
                         <td>{{itemVendido.tipo}}</td>
                         <td>{{itemVendido.preco | currency}}</td>
                     </tr>
                     <tr
-                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Chocolate'} track by $index">
+                        ng-repeat="itemVendido in ctrl.vendaRealizada.itensVendidos | filter: {tipo : 'Chocolate'} track by $index">
                         <td>{{itemVendido.produtoId}}</td>
                         <td>{{itemVendido.nome}}</td>
                         <td>{{itemVendido.tipo}}</td>
                         <td>{{itemVendido.preco | currency}}</td>
                     </tr>
                     <tr
-                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Doce'} track by $index">
+                        ng-repeat="itemVendido in ctrl.vendaRealizada.itensVendidos | filter: {tipo : 'Doce'} track by $index">
                         <td>{{itemVendido.produtoId}}</td>
                         <td>{{itemVendido.nome}}</td>
                         <td>{{itemVendido.tipo}}</td>
                         <td>{{itemVendido.preco | currency}}</td>
                     </tr>
                     <tr
-                        ng-repeat="itemVendido in vendaRealizada.itensVendidos | filter: {tipo : 'Sorvete'} track by $index">
+                        ng-repeat="itemVendido in ctrl.vendaRealizada.itensVendidos | filter: {tipo : 'Sorvete'} track by $index">
                         <td>{{itemVendido.produtoId}}</td>
                         <td>{{itemVendido.nome}}</td>
                         <td>{{itemVendido.tipo}}</td>

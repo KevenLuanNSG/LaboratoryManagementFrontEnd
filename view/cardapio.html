@@ -48,7 +48,7 @@
                     <td>{{lanche.nome}}</td>
                     <td>{{lanche.tipoProduto}}</td>
                     <td>{{lanche.descricao}}</td>
-                    <td>{{lanche.preco | currency}}</td>
+                    <td>{{lanche.preco | currency: 'R$'}}</td>
                     <td>
                         <center><button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#modalIngredientesLanche"
@@ -108,7 +108,7 @@
                     <td>{{bebida.nome}}</td>
                     <td>{{bebida.tipoProduto}}</td>
                     <td>{{bebida.descricao}}</td>
-                    <td>{{bebida.preco | currency}}</td>
+                    <td>{{bebida.preco | currency: 'R$'}}</td>
                     <td>
                         <center><span ng-show="bebida.ingredienteList == null" class="badge badge-danger">1
                                 Unidade</span>
@@ -170,7 +170,7 @@
                     <td>{{combo.nome}}</td>
                     <td>{{combo.tipoProduto}}</td>
                     <td>{{combo.descricao}}</td>
-                    <td>{{combo.preco | currency}}</td>
+                    <td>{{combo.preco | currency: 'R$'}}</td>
                     <td>
                         <center><button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#modalProdutosCombo"

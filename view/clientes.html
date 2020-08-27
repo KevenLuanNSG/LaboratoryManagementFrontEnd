@@ -1,31 +1,30 @@
-<div ng-controller="clienteCtrl">
-
+<div ng-controller="ClienteCtrl as ctrl">
     <div>
         <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('clientes'); viewClientesInicio(); carregarClientes()">Clientes</a>
+                    ng-click="ctrl.selecionarView('clientes'); ctrl.viewClientesInicio(); ctrl.carregarClientes()">Clientes</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('buscarCliente')">Buscar
+                    ng-click="ctrl.selecionarView('buscarCliente')">Buscar
                     Cliente</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('cadastrarCliente')">Cadastrar Cliente</a>
+                    ng-click="ctrl.selecionarView('cadastrarCliente')">Cadastrar Cliente</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="selecionarView('clienteAtualizarNome')">Atualizar Nome do Cliente</a>
+                    ng-click="ctrl.selecionarView('clienteAtualizarNome')">Atualizar Nome do Cliente</a>
             </li>
         </ul>
     </div>
 
-    <div class="jumbotron" ng-show="clientes.length == 0 && viewSelecionado == 'clientes'">
+    <div class="jumbotron" ng-show="ctrl.clientes.length == 0 && ctrl.viewSelecionado == 'clientes'">
         <div class="alert alert-danger"> Não foi encontrado nenhum cliente!</div>
     </div>
-    <div class="jumbotron" ng-show="clientes.length > 0 && viewSelecionado == 'clientes'" id="clientes">
+    <div class="jumbotron" ng-show="ctrl.clientes.length > 0 && ctrl.viewSelecionado == 'clientes'" id="clientes">
         <h4>Clientes</h4>
         <table class="table">
             <thead>
@@ -38,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="cliente in clientes">
+                <tr ng-repeat="cliente in ctrl.clientes">
                     <td>{{cliente.id}}</td>
                     <td>{{cliente.nome}}</td>
                     <td>{{cliente.cpf | cpfFilter}}</td>
@@ -51,15 +50,15 @@
         <div class="row lanc-list-pagination">
             <nav aria-label="...">
                 <ul class="pagination">
-                    <li ng-class="{ 'disabled': paginationFirst}" class="page-item">
-                        <button type="button" ng-disabled="paginationFirst" ng-click="viewPageNavigationAnterior()"
+                    <li ng-class="{ 'disabled': ctrl.paginationFirst}" class="page-item">
+                        <button type="button" ng-disabled="ctrl.paginationFirst" ng-click="ctrl.viewPageNavigationAnterior()"
                             class="page-link">Anterior</button>
                     </li>
-                    <li ng-repeat="viewPage in pagination" ng-class="{'active':page == viewPage}" class="page-item">
-                        <a class="page-link" ng-click="viewPageNavigation(viewPage)">{{viewPage}}</a>
+                    <li ng-repeat="viewPage in ctrl.pagination" ng-class="{'active':ctrl.page == viewPage}" class="page-item">
+                        <a class="page-link" ng-click="ctrl.viewPageNavigation(viewPage)">{{viewPage}}</a>
                     </li>
-                    <li ng-class="{ 'disabled': paginationLast}" class="page-item">
-                        <button type="button" ng-disabled="paginationLast" ng-click="viewPageNavigationProxima()"
+                    <li ng-class="{ 'disabled': ctrl.paginationLast}" class="page-item">
+                        <button type="button" ng-disabled="ctrl.paginationLast" ng-click="ctrl.viewPageNavigationProxima()"
                             class="page-link">Próxima</button>
                     </li>
                 </ul>
@@ -67,19 +66,19 @@
         </div>
     </div>
 
-    <div class="jumbotron" id="buscarCliente" ng-show="viewSelecionado == 'buscarCliente'">
+    <div class="jumbotron" id="buscarCliente" ng-show="ctrl.viewSelecionado == 'buscarCliente'">
         <h4>Buscar Cliente</h4>
         <form name="clienteFormBuscar">
-            <input class="form-control" type="text" ng-model="cpf" name="cpf" placeholder="CPF do Cliente"
+            <input class="form-control" type="text" ng-model="cpfBuscarCliente" name="cpfBuscarCliente" placeholder="CPF do Cliente"
                 ng-pattern="/^\d{11}$/" required="true" />
         </form>
-        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block" ng-click="buscarCliente(cpf)"
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block" ng-click="ctrl.buscarCliente(cpfBuscarCliente)"
             ng-disabled="clienteFormBuscar.$invalid">Buscar
             Cliente</button>
-        <div ng-show="clienteFormBuscar.cpf.$invalid && clienteFormBuscar.cpf.$dirty" class="alert alert-danger">
+        <div ng-show="clienteFormBuscar.cpfBuscarCliente.$invalid && clienteFormBuscar.cpfBuscarCliente.$dirty" class="alert alert-danger">
             CPF Inválido
         </div>
-        <table class="table" ng-show="showClienteEncontrado">
+        <table class="table" ng-show="ctrl.showClienteEncontrado">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -91,17 +90,17 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{clienteEncontrado.id}}</td>
-                    <td>{{clienteEncontrado.nome}}</td>
-                    <td>{{clienteEncontrado.cpf | cpfFilter}}</td>
-                    <td>{{clienteEncontrado.totalGasto | currency}}</td>
-                    <td>{{clienteEncontrado.quantidadeCompras}}</td>
+                    <td>{{ctrl.clienteEncontrado.id}}</td>
+                    <td>{{ctrl.clienteEncontrado.nome}}</td>
+                    <td>{{ctrl.clienteEncontrado.cpf | cpfFilter}}</td>
+                    <td>{{ctrl.clienteEncontrado.totalGasto | currency}}</td>
+                    <td>{{ctrl.clienteEncontrado.quantidadeCompras}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="jumbotron" id="cadastrarCliente" ng-show="viewSelecionado == 'cadastrarCliente'">
+    <div class="jumbotron" id="cadastrarCliente" ng-show="ctrl.viewSelecionado == 'cadastrarCliente'">
         <h4>Cadastrar Cliente</h4>
         <form name="clienteFormCadastrar">
             <input class="form-control" type="text" ng-model="cliente.nome" name="nome" placeholder="Nome do Cliente"
@@ -111,7 +110,7 @@
         </form>
 
         <button style="margin-bottom: 15px;" id="buttonCadastrar" class="btn btn-primary btn-block"
-            ng-click="cadastrarCliente(cliente)" ng-disabled="clienteFormCadastrar.$invalid">Cadastrar Cliente</button>
+            ng-click="ctrl.cadastrarCliente(cliente)" ng-disabled="clienteFormCadastrar.$invalid">Cadastrar Cliente</button>
 
         <div ng-show="clienteFormCadastrar.nome.$invalid && clienteFormCadastrar.nome.$dirty"
             class="alert alert-danger">
@@ -120,7 +119,7 @@
         <div ng-show="clienteFormCadastrar.cpf.$invalid && clienteFormCadastrar.cpf.$dirty" class="alert alert-danger">
             CPF Inválido
         </div>
-        <table class="table" ng-show="showClienteCadastrado">
+        <table class="table" ng-show="ctrl.showClienteCadastrado">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -132,18 +131,18 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{clienteCadastrado.id}}</td>
-                    <td>{{clienteCadastrado.nome}}</td>
-                    <td>{{clienteCadastrado.cpf | cpfFilter}}</td>
-                    <td>{{clienteCadastrado.totalGasto | currency}}</td>
-                    <td>{{clienteCadastrado.quantidadeCompras}}</td>
+                    <td>{{ctrl.clienteCadastrado.id}}</td>
+                    <td>{{ctrl.clienteCadastrado.nome}}</td>
+                    <td>{{ctrl.clienteCadastrado.cpf | cpfFilter}}</td>
+                    <td>{{ctrl.clienteCadastrado.totalGasto | currency}}</td>
+                    <td>{{ctrl.clienteCadastrado.quantidadeCompras}}</td>
                 </tr>
             </tbody>
         </table>
 
     </div>
 
-    <div class="jumbotron" id="clienteAtualizarNome" ng-show="viewSelecionado == 'clienteAtualizarNome'">
+    <div class="jumbotron" id="clienteAtualizarNome" ng-show="ctrl.viewSelecionado == 'clienteAtualizarNome'">
         <h4>Atualizar Nome do Cliente</h4>
         <form name="clienteFormAtualizarNome">
             <input class="form-control" type="text" ng-model="cpf" name="cpf" placeholder="CPF do Cliente"
@@ -152,7 +151,7 @@
                 ng-pattern="/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/" ng-required="true">
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="clienteAtualizarNome(cpf, nome)" ng-disabled="clienteFormAtualizarNome.$invalid">Atualizar
+            ng-click="ctrl.clienteAtualizarNome(cpf, nome)" ng-disabled="clienteFormAtualizarNome.$invalid">Atualizar
             Nome</button>
         <div ng-show="clienteFormAtualizarNome.cpf.$invalid && clienteFormAtualizarNome.cpf.$dirty"
             class="alert alert-danger">
@@ -162,7 +161,7 @@
             class="alert alert-danger">
             Nome Inválido
         </div>
-        <table class="table" ng-show="showClienteNomeAtualizado">
+        <table class="table" ng-show="ctrl.showClienteNomeAtualizado">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -174,14 +173,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{clienteNomeAtualizado.id}}</td>
-                    <td>{{clienteNomeAtualizado.nome}}</td>
-                    <td>{{clienteNomeAtualizado.cpf | cpfFilter}}</td>
-                    <td>{{clienteNomeAtualizado.totalGasto | currency}}</td>
-                    <td>{{clienteNomeAtualizado.quantidadeCompras}}</td>
+                    <td>{{ctrl.clienteNomeAtualizado.id}}</td>
+                    <td>{{ctrl.clienteNomeAtualizado.nome}}</td>
+                    <td>{{ctrl.clienteNomeAtualizado.cpf | cpfFilter}}</td>
+                    <td>{{ctrl.clienteNomeAtualizado.totalGasto | currency}}</td>
+                    <td>{{ctrl.clienteNomeAtualizado.quantidadeCompras}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-
 </div>
