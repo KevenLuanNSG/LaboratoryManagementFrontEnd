@@ -1,8 +1,19 @@
 import { IComponentController, IScope, IHttpService } from 'angular';
+
+interface IProdutoCtrl extends IScope {
+    cadastrarCliente: any;
+    buscarCliente: any;
+    clienteAtualizarNome: any;
+
+    clienteFormCadastrar: any;
+    clienteFormBuscar: any;
+    clienteFormAtualizarNome: any;
+}
+
 class ClienteCtrl implements IComponentController {
     private static $inject = ['$scope', '$http'];
     private http: IHttpService;
-    private scope: IScope;
+    private scope: IProdutoCtrl;
 
     private clientesInicio: boolean;
     private page: number;
@@ -12,18 +23,18 @@ class ClienteCtrl implements IComponentController {
     private paginationFirst: boolean;
     private paginationLast: boolean;
 
-    private clienteEncontrado:any;
-    private showClienteEncontrado:boolean;
+    private clienteEncontrado: any;
+    private showClienteEncontrado: boolean;
 
-    private clienteNomeAtualizado:any;
-    private showClienteNomeAtualizado:boolean;
+    private clienteNomeAtualizado: any;
+    private showClienteNomeAtualizado: boolean;
 
-    private clienteCadastrado:any;
-    private showClienteCadastrado:boolean;
+    private clienteCadastrado: any;
+    private showClienteCadastrado: boolean;
 
-    private viewSelecionado:string;
+    private viewSelecionado: string;
 
-    constructor($scope: IScope, $http: IHttpService) {
+    constructor($scope: IProdutoCtrl, $http: IHttpService) {
         this.http = $http;
         this.scope = $scope;
 
@@ -32,7 +43,7 @@ class ClienteCtrl implements IComponentController {
         this.paginationFirst = false;
         this.paginationLast = false;
         this.pagination = [];
-        
+
         this.showClienteEncontrado = false;
         this.showClienteNomeAtualizado = false;
         this.showClienteCadastrado = false;
@@ -44,7 +55,7 @@ class ClienteCtrl implements IComponentController {
         this.clientesInicio = true;
     }
     private carregarClientes() {
-         if (this.clientesInicio) {
+        if (this.clientesInicio) {
             this.page = 1;
         }
         this.clientesInicio = false;
@@ -74,39 +85,38 @@ class ClienteCtrl implements IComponentController {
         this.carregarClientes();
     }
 
-    private buscarCliente(cpf:string){
-        this.http.get("http://127.0.0.1:8080/cliente/visualizar?cpf="+ cpf).then((res) => {
-            //delete $scope.cpf; 
+    private buscarCliente(buscarCliente: any) {
+        this.http.get("http://127.0.0.1:8080/cliente/visualizar?cpf=" + buscarCliente.cpf).then((res) => {
             this.clienteEncontrado = res.data;
             this.showClienteEncontrado = true;
-            //$scope.clienteFormAtualizarNome.$setPristine();
+
+            this.scope.buscarCliente = undefined;
+            this.scope.clienteFormBuscar.$setPristine();
         })
     }
 
-    private clienteAtualizarNome(cpf:string, nome:string){
-        this.http.get("http://127.0.0.1:8080/cliente/atualizarNome?cpf="+cpf+"&nome="+nome).then((res) => {
-            //delete $scope.cpf;
-            //delete $scope.nome
+    private clienteAtualizarNome(clienteAtualizarNome: any) {
+        this.http.get("http://127.0.0.1:8080/cliente/atualizarNome?cpf=" + clienteAtualizarNome.cpf + "&nome=" + clienteAtualizarNome.nome).then((res) => {
             this.clienteNomeAtualizado = res.data;
             this.showClienteNomeAtualizado = true;
-            //$scope.clienteFormAtualizarNome.$setPristine();
+
+            this.scope.clienteAtualizarNome = undefined;
+            this.scope.clienteFormAtualizarNome.$setPristine();
         })
     }
 
-    private cadastrarCliente(cliente:any){
-        this.http.post("http://127.0.0.1:8080/cliente/cadastrar", cliente).then((res) => {
-            //delete $scope.cliente;
+    private cadastrarCliente(cadastrarCliente: any) {
+        this.http.post("http://127.0.0.1:8080/cliente/cadastrar", cadastrarCliente).then((res) => {
             this.clienteCadastrado = res.data;
             this.showClienteCadastrado = true;
-            //$scope.clienteFormCadastrar.$setPristine();
+
+            this.scope.cadastrarCliente = undefined;
+            this.scope.clienteFormCadastrar.$setPristine();
         })
     }
 
-    private selecionarView(selecionado:string){
+    private selecionarView(selecionado: string) {
         this.viewSelecionado = selecionado;
-    }
-
-    $onInit() {
     }
 }
 export default ClienteCtrl;

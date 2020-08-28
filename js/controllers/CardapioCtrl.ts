@@ -1,4 +1,4 @@
-import { IComponentController, IScope, IHttpService} from 'angular';
+import { IComponentController, IScope, IHttpService } from 'angular';
 
 class CardapioCtrl implements IComponentController {
     private static $inject = ['$scope', '$http'];
@@ -6,9 +6,9 @@ class CardapioCtrl implements IComponentController {
     private combos: any;
     private lanches: any;
     private todasBebidas: any;
-    private fazerProduto:any;
-    private viewSelecionado:String;
-    private viewProdutos:number;
+    private fazerProduto: any;
+    private viewSelecionado: String;
+    private viewProdutos: number;
     constructor($scope: IScope, $http: IHttpService) {
         this.http = $http;
         this.combos = [];
@@ -19,7 +19,7 @@ class CardapioCtrl implements IComponentController {
         this.viewProdutos = 0;
     }
 
-    private carregarCombos() { 
+    private carregarCombos() {
         this.http.get("http://127.0.0.1:8080/cardapio/combos").then((res) => this.combos = res.data);
     }
     private carregarLanches() {
@@ -29,22 +29,19 @@ class CardapioCtrl implements IComponentController {
         this.http.get("http://127.0.0.1:8080/cardapio/bebidas").then((res) => this.todasBebidas = res.data);
     };
 
-    //Lista de ingredientes e quantidade utilizada na produção do lanche
-    private carregarFazerProduto(produtoId:number){
+    private carregarFazerProduto(produtoId: number) {
         this.http.get("http://localhost:8080/fazer/info?produtoId=" + produtoId).then((res) => this.fazerProduto = res.data);
     }
 
-
-    private selecionarView(selecionado:String) {
+    private selecionarView(selecionado: String) {
         this.viewSelecionado = selecionado;
     }
 
+    private viewProdutosCombo(id: number) {
+        this.viewProdutos = id;
+    }
 
-    private viewProdutosCombo(id:number){
-        this.viewProdutos = id; 
-    } 
-    
-    $onInit(){
+    $onInit() {
         console.log(this.carregarLanches(), this.carregarBebidas(), this.carregarCombos());
     }
 }

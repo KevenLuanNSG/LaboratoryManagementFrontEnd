@@ -1,5 +1,5 @@
 <div ng-controller="CardapioCtrl as ctrl">
-    <div>
+    <div id="navPage">
         <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
@@ -25,11 +25,13 @@
         ng-show="ctrl.todasBebidas.length == 0 && ctrl.lanches.length == 0 && ctrl.combos.length == 0 && ctrl.viewSelecionado == 'cardapio'">
         <div class="alert alert-danger"> Não foi encontrado nenhum produto no cardapio!</div>
     </div>
+
     <div class="jumbotron" ng-show="ctrl.lanches.length == 0 && ctrl.viewSelecionado == 'lanches'">
         <div class="alert alert-danger"> Não foi encontrado nenhum lanche!</div>
     </div>
     <div class="jumbotron"
-        ng-show="ctrl.lanches.length > 0 && (ctrl.viewSelecionado == 'lanches' || ctrl.viewSelecionado == 'cardapio')" id="lanches">
+        ng-show="ctrl.lanches.length > 0 && (ctrl.viewSelecionado == 'lanches' || ctrl.viewSelecionado == 'cardapio')"
+        id="lanches">
         <h4>Lanches</h4>
         <table class="table">
             <thead>
@@ -84,8 +86,7 @@
         </table>
     </div>
 
-    <div class="jumbotron"
-        ng-show="ctrl.todasBebidas.length == 0 && ctrl.viewSelecionado == 'bebidas'">
+    <div class="jumbotron" ng-show="ctrl.todasBebidas.length == 0 && ctrl.viewSelecionado == 'bebidas'">
         <div class="alert alert-danger"> Não foi encontrado nenhuma bebida!</div>
     </div>
     <div class="jumbotron"
@@ -151,7 +152,8 @@
     <div class="jumbotron" ng-show="ctrl.combos.length == 0 && ctrl.viewSelecionado == 'combos'">
         <div class="alert alert-danger"> Não foi encontrado nenhum combo!</div>
     </div>
-    <div class="jumbotron" ng-show="ctrl.combos.length > 0 && (ctrl.viewSelecionado == 'combos' || ctrl.viewSelecionado == 'cardapio')"
+    <div class="jumbotron"
+        ng-show="ctrl.combos.length > 0 && (ctrl.viewSelecionado == 'combos' || ctrl.viewSelecionado == 'cardapio')"
         id="combos">
         <h4>Combos</h4>
         <table class="table">
@@ -187,7 +189,8 @@
                                     </button>
                                 </div>
                                 <div class="modal-body" ng-repeat="combo in ctrl.combos">
-                                    <div ng-show="combo.id == ctrl.viewProdutos" ng-repeat="produto in combo.produtoList">
+                                    <div ng-show="combo.id == ctrl.viewProdutos"
+                                        ng-repeat="produto in combo.produtoList">
                                         <span class="badge badge-primary">Id: {{produto.id}}</span>
                                         <span class="badge badge-success">Produto:
                                             {{produto.nome}}</span>
