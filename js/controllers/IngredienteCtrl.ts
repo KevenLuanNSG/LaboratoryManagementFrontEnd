@@ -1,9 +1,26 @@
 import { IComponentController, IScope, IHttpService } from 'angular';
 
+interface IIngredienteCtrl extends IScope {
+    ingrediente: any;
+    ingredienteFormCadastrar: any;
+
+    ingredienteComprar: any;
+    ingredienteFormComprar: any;
+
+    ingredienteDarBaixa: any;
+    ingredienteFormDarBaixa: any;
+
+    ingredienteAtualizarNome: any;
+    ingredienteFormAtualizarNome: any;
+
+    ingredienteAtualizarQuantidadeMinima: any;
+    ingredienteFormAtualizarQuantidadeMinima: any;
+}
+
 class IngredienteCtrl implements IComponentController {
     private static $inject = ['$scope', '$http'];
     private http: IHttpService;
-    private scope: IScope;
+    private scope: IIngredienteCtrl;
 
     private ingredientesInicio: boolean;
     private pageIngredientes: number;
@@ -29,25 +46,25 @@ class IngredienteCtrl implements IComponentController {
     private paginationIngredientesZeradosFirst: boolean;
     private paginationIngredientesZeradosLast: boolean;
 
-    private ingredienteCadastrado:any;
-    private showIngredienteCadastrado:boolean;
+    private ingredienteCadastrado: any;
+    private showIngredienteCadastrado: boolean;
 
-    private ingredienteComprado:any;
-    private showIngredienteComprado:boolean;
+    private ingredienteComprado: any;
+    private showIngredienteComprado: boolean;
 
-    private ingredientePerdido:any;
-    private showIngredientePerdido:boolean;
+    private ingredientePerdido: any;
+    private showIngredientePerdido: boolean;
 
-    private ingredienteNomeAtualizado:any;
-    private showIngredienteNomeAtualizado:boolean;
+    private ingredienteNomeAtualizado: any;
+    private showIngredienteNomeAtualizado: boolean;
 
-    private ingredienteQuantidadeMinimaAtualizada:any;
-    private showingredienteQuantidadeMinimaAtualizada:boolean;
+    private ingredienteQuantidadeMinimaAtualizada: any;
+    private showIngredienteQuantidadeMinimaAtualizada: boolean;
 
-    private viewPagina:string;
-    private viewSelecionado:string;
+    private viewPagina: string;
+    private viewSelecionado: string;
 
-    constructor($scope: IScope, $http: IHttpService) {
+    constructor($scope: IIngredienteCtrl, $http: IHttpService) {
         this.http = $http;
         this.scope = $scope;
 
@@ -70,7 +87,7 @@ class IngredienteCtrl implements IComponentController {
         this.showIngredienteComprado = false;
         this.showIngredientePerdido = false;
         this.showIngredienteNomeAtualizado = false;
-        this.showingredienteQuantidadeMinimaAtualizada = false;
+        this.showIngredienteQuantidadeMinimaAtualizada = false;
 
         this.viewPagina = "ingredientes";
         this.viewSelecionado = "ingredientes";
@@ -181,65 +198,66 @@ class IngredienteCtrl implements IComponentController {
     }
 
 
-    private cadastrarIngrediente(ingrediente:any){
+    private cadastrarIngrediente(ingrediente: any) {
         this.http.post("http://127.0.0.1:8080/ingrediente/cadastrar", ingrediente).then((res) => {
-            //delete $scope.ingrediente;
             this.ingredienteCadastrado = res.data;
             this.showIngredienteCadastrado = true;
-            //$scope.ingredienteFormCadastrar.$setPristine();
+
+            this.scope.ingrediente = undefined;
+            this.scope.ingredienteFormCadastrar.$setPristine();
         })
     }
 
 
-    private comprarIngrediente(ingredienteId:number, quantidade:number){
-        this.http.get("http://127.0.0.1:8080/ingrediente/comprar?ingredienteId=" + ingredienteId + "&quantidade=" + quantidade).then((res) => {
-            //delete $scope.ingredienteId;
-            //delete $scope.quantidade;
+    private comprarIngrediente(ingredienteComprar: any) {
+        this.http.get("http://127.0.0.1:8080/ingrediente/comprar?ingredienteId=" + ingredienteComprar.id + "&quantidade=" + ingredienteComprar.quantidade).then((res) => {
             this.ingredienteComprado = res.data;
             this.showIngredienteComprado = true;
-            //$scope.ingredienteFormComprar.$setPristine();
+
+            this.scope.ingredienteComprar = undefined;
+            this.scope.ingredienteFormComprar.$setPristine();
         })
     }
 
 
-    private darBaixa(ingredienteId:number, quantidade:number){
-        this.http.get("http://127.0.0.1:8080/ingrediente/darBaixa?ingredienteId=" + ingredienteId + "&quantidade=" + quantidade).then((res) => {
-            //delete $scope.ingredienteId;
-            //delete $scope.quantidade;
+    private darBaixa(ingredienteDarBaixa: any) {
+        this.http.get("http://127.0.0.1:8080/ingrediente/darBaixa?ingredienteId=" + ingredienteDarBaixa.id + "&quantidade=" + ingredienteDarBaixa.quantidade).then((res) => {
             this.ingredientePerdido = res.data;
             this.showIngredientePerdido = true;
-            //$scope.ingredienteFormDarBaixa.$setPristine();
+
+            this.scope.ingredienteDarBaixa = undefined;
+            this.scope.ingredienteFormDarBaixa.$setPristine();
         })
     }
 
 
-    private atualizarNome(ingredienteId:number, nome:string){
-        this.http.get("http://127.0.0.1:8080/ingrediente/atualizarNome?ingredienteId=" + ingredienteId + "&nome=" + nome).then((res) => {
-            //delete $scope.ingredienteId;
-            //delete $scope.nome;
+    private atualizarNome(ingredienteAtualizarNome: any) {
+        this.http.get("http://127.0.0.1:8080/ingrediente/atualizarNome?ingredienteId=" + ingredienteAtualizarNome.id + "&nome=" + ingredienteAtualizarNome.nome).then((res) => {
             this.ingredienteNomeAtualizado = res.data;
             this.showIngredienteNomeAtualizado = true;
-            //$scope.ingredienteFormAtualizarNome.$setPristine();
+
+            this.scope.ingredienteAtualizarNome = undefined;
+            this.scope.ingredienteFormAtualizarNome.$setPristine();
         })
     }
 
 
-    private atualizarQuantidadeMinima(ingredienteId:number, quantidadeMinima:number){
-        this.http.get("http://127.0.0.1:8080/ingrediente/quantidadeMinima?ingredienteId=" + ingredienteId + "&quantidadeMinima=" + quantidadeMinima).then((res) => {
-            //delete $scope.ingredienteId;
-            //delete $scope.quantidadeMinima;
+    private atualizarQuantidadeMinima(ingredienteAtualizarQuantidadeMinima: any) {
+        this.http.get("http://127.0.0.1:8080/ingrediente/quantidadeMinima?ingredienteId=" + ingredienteAtualizarQuantidadeMinima.id + "&quantidadeMinima=" + ingredienteAtualizarQuantidadeMinima.quantidadeMinima).then((res) => {
             this.ingredienteQuantidadeMinimaAtualizada = res.data;
-            this.showingredienteQuantidadeMinimaAtualizada = true;
-            //$scope.ingredienteFormAtualizarQuantidadeMinima.$setPristine();
+            this.showIngredienteQuantidadeMinimaAtualizada = true;
+
+            this.scope.ingredienteAtualizarQuantidadeMinima = undefined;
+            this.scope.ingredienteFormAtualizarQuantidadeMinima.$setPristine();
         })
     }
 
-    private selecionarView(pagina:string, selecionado:string){
+    private selecionarView(pagina: string, selecionado: string) {
         this.viewPagina = pagina;
         this.viewSelecionado = selecionado;
     }
 
-    $onInit(){
+    $onInit() {
         this.carregarIngredientes();
     }
 }

@@ -141,13 +141,13 @@
     <div class="jumbotron" id="comprarIngrediente" ng-show="ctrl.viewPagina == 'comprar'">
         <h4>Comprar Ingrediente</h4>
         <form name="ingredienteFormComprar">
-            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+            <input class="form-control" type="text" ng-model="ingredienteComprar.id" name="ingredienteId"
                 placeholder="ID do Ingrediente" ng-pattern="/^[1-9][0-9]*$/" ng-required="true" />
-            <input class="form-control" type="text" ng-model="quantidade" name="quantidade"
+            <input class="form-control" type="text" ng-model="ingredienteComprar.quantidade" name="quantidade"
                 placeholder="Quantidade da compra" ng-pattern="/^\d*\.\d{1,3}$/" ng-required="true" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.comprarIngrediente(ingredienteId, quantidade)"
+            ng-click="ctrl.comprarIngrediente(ingredienteComprar)"
             ng-disabled="ingredienteFormComprar.$invalid">Comprar Ingrediente</button>
         <div ng-show="ingredienteFormComprar.ingredienteId.$invalid && ingredienteFormComprar.ingredienteId.$dirty"
             class="alert alert-danger">
@@ -180,13 +180,13 @@
     <div class="jumbotron" id="darBaixa" ng-show="ctrl.viewPagina == 'darBaixa'">
         <h4>Dar Baixa</h4>
         <form name="ingredienteFormDarBaixa">
-            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+            <input class="form-control" type="text" ng-model="ingredienteDarBaixa.id" name="ingredienteId"
                 placeholder="ID do Ingrediente" ng-pattern="/^[1-9][0-9]*$/" ng-required="true" />
-            <input class="form-control" type="text" ng-model="quantidade" name="quantidade"
+            <input class="form-control" type="text" ng-model="ingredienteDarBaixa.quantidade" name="quantidade"
                 placeholder="Quantidade da baixa" ng-pattern="/^\d*\.\d{1,3}$/" ng-required="true" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.darBaixa(ingredienteId, quantidade)" ng-disabled="ingredienteFormDarBaixa.$invalid">Dar
+            ng-click="ctrl.darBaixa(ingredienteDarBaixa)" ng-disabled="ingredienteFormDarBaixa.$invalid">Dar
             Baixa</button>
         <div ng-show="ingredienteFormDarBaixa.ingredienteId.$invalid && ingredienteFormDarBaixa.ingredienteId.$dirty"
             class="alert alert-danger">
@@ -219,13 +219,13 @@
     <div class="jumbotron" id="atualizarNome" ng-show="ctrl.viewPagina == 'atualizarNome'">
         <h4>Atualizar Nome</h4>
         <form name="ingredienteFormAtualizarNome">
-            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+            <input class="form-control" type="text" ng-model="ingredienteAtualizarNome.id" name="ingredienteId"
                 placeholder="ID do Ingrediente" ng-pattern="/^[1-9][0-9]*$/" ng-required="true" />
-            <input class="form-control" type="text" ng-model="nome" name="nome" placeholder="Novo Nome"
+            <input class="form-control" type="text" ng-model="ingredienteAtualizarNome.nome" name="nome" placeholder="Novo Nome"
                 ng-pattern="/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/" ng-required="true" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.atualizarNome(ingredienteId, nome)" ng-disabled="ingredienteFormAtualizarNome.$invalid">Atualizar
+            ng-click="ctrl.atualizarNome(ingredienteAtualizarNome)" ng-disabled="ingredienteFormAtualizarNome.$invalid">Atualizar
             Nome</button>
         <div ng-show="ingredienteFormAtualizarNome.ingredienteId.$invalid && ingredienteFormAtualizarNome.ingredienteId.$dirty"
             class="alert alert-danger">
@@ -258,13 +258,13 @@
     <div class="jumbotron" id="atualizarQuantidadeMinima" ng-show="ctrl.viewPagina == 'atualizarQuantidadeMinima'">
         <h4>Atualizar Quantidade Minima</h4>
         <form name="ingredienteFormAtualizarQuantidadeMinima">
-            <input class="form-control" type="text" ng-model="ingredienteId" name="ingredienteId"
+            <input class="form-control" type="text" ng-model="ingredienteAtualizarQuantidadeMinima.id" name="ingredienteId"
                 placeholder="ID do Ingrediente" ng-pattern="/^[1-9][0-9]*$/" ng-required="true" />
-            <input class="form-control" type="text" ng-model="quantidadeMinima" name="quantidadeMinima"
+            <input class="form-control" type="text" ng-model="ingredienteAtualizarQuantidadeMinima.quantidadeMinima" name="quantidadeMinima"
                 placeholder="Quantidade Minima" ng-pattern="/^\d*\.\d{1,3}$/" ng-required="true" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.atualizarQuantidadeMinima(ingredienteId, quantidadeMinima)"
+            ng-click="ctrl.atualizarQuantidadeMinima(ingredienteAtualizarQuantidadeMinima)"
             ng-disabled="ingredienteFormAtualizarQuantidadeMinima.$invalid">Atualizar</button>
         <div ng-show="ingredienteFormAtualizarQuantidadeMinima.ingredienteId.$invalid && ingredienteFormAtualizarQuantidadeMinima.ingredienteId.$dirty"
             class="alert alert-danger">
@@ -316,7 +316,7 @@
                     <td>{{ingrediente.nome}}</td>
                     <td>{{ingrediente.quantidade}}</td>
                     <td>{{ingrediente.quantidadeMinima}}</td>
-                    <td><button type="button" class="btn btn-success btn-sm" ng-click="ctrl.viewComprar()">Comprar
+                    <td><button type="button" class="btn btn-success btn-sm" ng-click="ctrl.selecionarView('comprar', 'ingredientesLimite')">Comprar
                         </button></td>
                 </tr>
             </tbody>
@@ -366,7 +366,7 @@
                     <td>{{ingrediente.nome}}</td>
                     <td>{{ingrediente.quantidade}}</td>
                     <td>{{ingrediente.quantidadeMinima}}</td>
-                    <td><button type="button" class="btn btn-success btn-sm" ng-click="viewComprar()">Comprar
+                    <td><button type="button" class="btn btn-success btn-sm" ng-click="ctrl.selecionarView('comprar', 'ingredientesZerados')">Comprar
                         </button></td>
                 </tr>
             </tbody>

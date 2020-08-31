@@ -1,9 +1,34 @@
 import { IComponentController, IScope, IHttpService, forEach } from 'angular';
 
+interface IVendaCtrl extends IScope {
+
+    venda: any;
+    vendaFormRealizar: any;
+
+    dateVendasDoDia: any;
+    vendasDoDiaForm: any;
+
+    dateStartVendasPorPeriodo: any;
+    dateEndVendasPorPeriodo: any;
+    vendasPorPeriodoForm: any;
+
+    cpfVendasPorCliente: any;
+    vendasPorClienteForm: any;
+
+    cpfVendasPorPeriodoPorCliente: any;
+    dateStartVendasPorPeriodoPorCliente: any;
+    dateEndVendasPorPeriodoPorCliente: any;
+    vendasPorPeriodoPorClienteForm: any;
+
+    cpfVendasDoDiaPorCliente: any;
+    dateVendasDoDiaPorCliente: any;
+    vendasDoDiaPorClienteForm: any;
+}
+
 class VendaCtrl implements IComponentController {
     private static $inject = ['$scope', '$http'];
     private http: IHttpService;
-    private scope: IScope;
+    private scope: IVendaCtrl;
 
     private bebidasInd: any;
     private doces: any;
@@ -87,7 +112,7 @@ class VendaCtrl implements IComponentController {
     private selecionarProdutos: boolean;
     private selecionarTipoDoProduto: string;
 
-    constructor($scope: IScope, $http: IHttpService) {
+    constructor($scope: IVendaCtrl, $http: IHttpService) {
         this.http = $http;
         this.scope = $scope;
 
@@ -257,18 +282,19 @@ class VendaCtrl implements IComponentController {
         }
 
         this.http.post("http://127.0.0.1:8080/venda/vender", venda).then((res) => {
-            //delete this.venda;
             this.vendaRealizada = res.data;
             this.showVendaRealizada = true;
-            //this.vendaFormRealizar.$setPristine();
+
+            this.scope.venda = undefined;
+            this.scope.vendaFormRealizar.$setPristine();
             this.produtoList = [];
             this.produtoIndependenteList = [];
             this.comboList = [];
             this.valorVenda = 0;
         });
-        
 
-        
+
+
     };
 
 
@@ -317,16 +343,16 @@ class VendaCtrl implements IComponentController {
         this.vendasDoDiaInicio = true;
     }
 
-    private visualizarVendasDoDia(date: Date) {
+    private visualizarVendasDoDia(dateVendasDoDia: Date) {
         if (this.vendasDoDiaInicio) {
             this.pageVendasDoDia = 1;
         }
         this.vendasDoDiaInicio = false;
-        this.dateVendasDoDia = date;
+        this.dateVendasDoDia = dateVendasDoDia;
         let mesString = "";
-        let dia = date.getDate();
-        let mes = date.getMonth() + 1;
-        let ano = date.getFullYear();
+        let dia = dateVendasDoDia.getDate();
+        let mes = dateVendasDoDia.getMonth() + 1;
+        let ano = dateVendasDoDia.getFullYear();
         if (mes < 10) {
             mesString = "0" + mes.toString();
         } else {
@@ -346,6 +372,9 @@ class VendaCtrl implements IComponentController {
             }
 
             this.paginationVendasDoDia = this.paginationVendasDoDia.slice(this.pageVendasDoDia == 1 ? this.pageVendasDoDia - 1 : this.pageVendasDoDia == 2 ? this.pageVendasDoDia - 2 : this.pageVendasDoDia - 3, this.pageVendasDoDia + 2);
+
+            this.scope.dateVendasDoDia = undefined;
+            this.scope.vendasDoDiaForm.$setPristine();
         });
     };
     private viewPageNavigationAnteriorVendasDoDia() {
@@ -370,18 +399,18 @@ class VendaCtrl implements IComponentController {
         this.vendasPorPeriodoInicio = true;
     }
 
-    private visualizarVendasPorPeriodo(dateStart: Date, dateEnd: Date) {
+    private visualizarVendasPorPeriodo(dateStartVendasPorPeriodo: Date, dateEndVendasPorPeriodo: Date) {
         if (this.vendasPorPeriodoInicio) {
             this.pageVendasPorPeriodo = 1;
         }
         this.vendasPorPeriodoInicio = false;
-        this.dateStartVendasPorPeriodo = dateStart;
-        this.dateEndVendasPorPeriodo = dateEnd;
+        this.dateStartVendasPorPeriodo = dateStartVendasPorPeriodo;
+        this.dateEndVendasPorPeriodo = dateEndVendasPorPeriodo;
 
         let mesStringStart = "";
-        let diaStart = dateStart.getDate();
-        let mesStart = dateStart.getMonth() + 1;
-        let anoStart = dateStart.getFullYear();
+        let diaStart = dateStartVendasPorPeriodo.getDate();
+        let mesStart = dateStartVendasPorPeriodo.getMonth() + 1;
+        let anoStart = dateStartVendasPorPeriodo.getFullYear();
         if (mesStart < 10) {
             mesStringStart = "0" + mesStart.toString();
         } else {
@@ -389,9 +418,9 @@ class VendaCtrl implements IComponentController {
         }
 
         let mesStringEnd = "";
-        let diaEnd = dateEnd.getDate();
-        let mesEnd = dateEnd.getMonth() + 1;
-        let anoEnd = dateEnd.getFullYear();
+        let diaEnd = dateEndVendasPorPeriodo.getDate();
+        let mesEnd = dateEndVendasPorPeriodo.getMonth() + 1;
+        let anoEnd = dateEndVendasPorPeriodo.getFullYear();
         if (mesEnd < 10) {
             mesStringEnd = "0" + mesEnd.toString();
         } else {
@@ -412,6 +441,10 @@ class VendaCtrl implements IComponentController {
             }
 
             this.paginationVendasPorPeriodo = this.paginationVendasPorPeriodo.slice(this.pageVendasPorPeriodo == 1 ? this.pageVendasPorPeriodo - 1 : this.pageVendasPorPeriodo == 2 ? this.pageVendasPorPeriodo - 2 : this.pageVendasPorPeriodo - 3, this.pageVendasPorPeriodo + 2);
+
+            this.scope.dateStartVendasPorPeriodo = undefined;
+            this.scope.dateEndVendasPorPeriodo = undefined;
+            this.scope.vendasPorPeriodoForm.$setPristine();
         });
     };
     private viewPageNavigationAnteriorVendasPorPeriodo() {
@@ -436,15 +469,15 @@ class VendaCtrl implements IComponentController {
         this.vendasPorClienteInicio = true;
     }
 
-    private visualizarVendasPorCliente(cpf: string) {
+    private visualizarVendasPorCliente(cpfVendasPorCliente: string) {
         if (this.vendasPorClienteInicio) {
             this.pageVendasPorCliente = 1;
         }
         this.vendasPorClienteInicio = false;
-        this.http.get("http://127.0.0.1:8080/venda/visualizar/cliente?cpf=" + cpf + "&page=" + (this.pageVendasPorCliente - 1)).then((res) => {
+        this.http.get("http://127.0.0.1:8080/venda/visualizar/cliente?cpf=" + cpfVendasPorCliente + "&page=" + (this.pageVendasPorCliente - 1)).then((res) => {
             this.vendasPorClienteData = res.data;
             this.vendasPorCliente = this.vendasPorClienteData.content;
-            this.cpfVendasPorCliente = cpf;
+            this.cpfVendasPorCliente = cpfVendasPorCliente;
             this.paginationVendasPorCliente = [];
 
             this.paginationFirstVendasPorCliente = this.vendasPorClienteData.first;
@@ -455,6 +488,9 @@ class VendaCtrl implements IComponentController {
             }
 
             this.paginationVendasPorCliente = this.paginationVendasPorCliente.slice(this.pageVendasPorCliente == 1 ? this.pageVendasPorCliente - 1 : this.pageVendasPorCliente == 2 ? this.pageVendasPorCliente - 2 : this.pageVendasPorCliente - 3, this.pageVendasPorCliente + 2);
+
+            this.scope.cpfVendasPorCliente = undefined;
+            this.scope.vendasPorClienteForm.$setPristine();
         });
     };
     private viewPageNavigationAnteriorVendasPorCliente() {
@@ -479,18 +515,18 @@ class VendaCtrl implements IComponentController {
         this.vendasPorPeriodoPorClienteInicio = true;
     }
 
-    private visualizarVendasPorPeriodoPorCliente(dateStart: Date, dateEnd: Date, cpf: string) {
+    private visualizarVendasPorPeriodoPorCliente(dateStartVendasPorPeriodoPorCliente: Date, dateEndVendasPorPeriodoPorCliente: Date, cpfVendasPorPeriodoPorCliente: string) {
         if (this.vendasPorPeriodoPorClienteInicio) {
             this.pageVendasPorPeriodoPorCliente = 1;
         }
         this.vendasPorPeriodoPorClienteInicio = false;
-        this.dateStartVendasPorPeriodoPorCliente = dateStart;
-        this.dateEndVendasPorPeriodoPorCliente = dateEnd;
+        this.dateStartVendasPorPeriodoPorCliente = dateStartVendasPorPeriodoPorCliente;
+        this.dateEndVendasPorPeriodoPorCliente = dateEndVendasPorPeriodoPorCliente;
 
         let mesStringStart = "";
-        let diaStart = dateStart.getDate();
-        let mesStart = dateStart.getMonth() + 1;
-        let anoStart = dateStart.getFullYear();
+        let diaStart = dateStartVendasPorPeriodoPorCliente.getDate();
+        let mesStart = dateStartVendasPorPeriodoPorCliente.getMonth() + 1;
+        let anoStart = dateStartVendasPorPeriodoPorCliente.getFullYear();
         if (mesStart < 10) {
             mesStringStart = "0" + mesStart.toString();
         } else {
@@ -498,18 +534,18 @@ class VendaCtrl implements IComponentController {
         }
 
         let mesStringEnd = "";
-        let diaEnd = dateEnd.getDate();
-        let mesEnd = dateEnd.getMonth() + 1;
-        let anoEnd = dateEnd.getFullYear();
+        let diaEnd = dateEndVendasPorPeriodoPorCliente.getDate();
+        let mesEnd = dateEndVendasPorPeriodoPorCliente.getMonth() + 1;
+        let anoEnd = dateEndVendasPorPeriodoPorCliente.getFullYear();
         if (mesEnd < 10) {
             mesStringEnd = "0" + mesEnd.toString();
         } else {
             mesStringEnd = mesEnd.toString();
         }
-        this.http.get("http://127.0.0.1:8080/venda/visualizar/clienteData?cpf=" + cpf + "&dateStart=" + anoStart + "-" + mesStringStart + "-" + diaStart + "&dateEnd=" + anoEnd + "-" + mesStringEnd + "-" + diaEnd + "&page=" + (this.pageVendasPorPeriodoPorCliente - 1)).then((res) => {
+        this.http.get("http://127.0.0.1:8080/venda/visualizar/clienteData?cpf=" + cpfVendasPorPeriodoPorCliente + "&dateStart=" + anoStart + "-" + mesStringStart + "-" + diaStart + "&dateEnd=" + anoEnd + "-" + mesStringEnd + "-" + diaEnd + "&page=" + (this.pageVendasPorPeriodoPorCliente - 1)).then((res) => {
             this.vendasPorPeriodoPorClienteData = res.data;
             this.vendasPorPeriodoPorCliente = this.vendasPorPeriodoPorClienteData.content;
-            this.cpfVendasPorPeriodoPorCliente = cpf;
+            this.cpfVendasPorPeriodoPorCliente = cpfVendasPorPeriodoPorCliente;
             this.paginationVendasPorPeriodoPorCliente = [];
 
             this.paginationFirstVendasPorPeriodoPorCliente = this.vendasPorPeriodoPorClienteData.first;
@@ -520,6 +556,11 @@ class VendaCtrl implements IComponentController {
             }
 
             this.paginationVendasPorPeriodoPorCliente = this.paginationVendasPorPeriodoPorCliente.slice(this.pageVendasPorPeriodoPorCliente == 1 ? this.pageVendasPorPeriodoPorCliente - 1 : this.pageVendasPorPeriodoPorCliente == 2 ? this.pageVendasPorPeriodoPorCliente - 2 : this.pageVendasPorPeriodoPorCliente - 3, this.pageVendasPorPeriodoPorCliente + 2);
+
+            this.scope.cpfVendasPorPeriodoPorCliente = undefined;
+            this.scope.dateStartVendasPorPeriodoPorCliente = undefined;
+            this.scope.dateEndVendasPorPeriodoPorCliente = undefined;
+            this.scope.vendasPorPeriodoPorClienteForm.$setPristine();
         });
     };
     private viewPageNavigationAnteriorVendasPorPeriodoPorCliente() {
@@ -544,25 +585,25 @@ class VendaCtrl implements IComponentController {
         this.vendasDoDiaPorClienteInicio = true;
     }
 
-    private visualizarVendasDoDiaPorCliente(date: Date, cpf: string) {
+    private visualizarVendasDoDiaPorCliente(dateVendasDoDiaPorCliente: Date, cpfVendasDoDiaPorCliente: string) {
         if (this.vendasDoDiaPorClienteInicio) {
             this.pageVendasDoDiaPorCliente = 1;
         }
         this.vendasDoDiaPorClienteInicio = false;
-        this.dateVendasDoDiaPorCliente = date;
+        this.dateVendasDoDiaPorCliente = dateVendasDoDiaPorCliente;
         let mesString = "";
-        let dia = date.getDate();
-        let mes = date.getMonth() + 1;
-        let ano = date.getFullYear();
+        let dia = dateVendasDoDiaPorCliente.getDate();
+        let mes = dateVendasDoDiaPorCliente.getMonth() + 1;
+        let ano = dateVendasDoDiaPorCliente.getFullYear();
         if (mes < 10) {
             mesString = "0" + mes.toString();
         } else {
             mesString = mes.toString();
         }
-        this.http.get("http://127.0.0.1:8080/venda/visualizar/clienteData?cpf=" + cpf + "&dateStart=" + ano + "-" + mesString + "-" + dia + "&dateEnd=" + ano + "-" + mesString + "-" + dia + "&page=" + (this.pageVendasDoDiaPorCliente - 1)).then((res) => {
+        this.http.get("http://127.0.0.1:8080/venda/visualizar/clienteData?cpf=" + cpfVendasDoDiaPorCliente + "&dateStart=" + ano + "-" + mesString + "-" + dia + "&dateEnd=" + ano + "-" + mesString + "-" + dia + "&page=" + (this.pageVendasDoDiaPorCliente - 1)).then((res) => {
             this.vendasDoDiaPorClienteData = res.data;
             this.vendasDoDiaPorCliente = this.vendasDoDiaPorClienteData.content;
-            this.cpfVendasDoDiaPorCliente = cpf;
+            this.cpfVendasDoDiaPorCliente = cpfVendasDoDiaPorCliente;
             this.paginationVendasDoDiaPorCliente = [];
 
             this.paginationFirstVendasDoDiaPorCliente = this.vendasDoDiaPorClienteData.first;
@@ -573,6 +614,10 @@ class VendaCtrl implements IComponentController {
             }
 
             this.paginationVendasDoDiaPorCliente = this.paginationVendasDoDiaPorCliente.slice(this.pageVendasDoDiaPorCliente == 1 ? this.pageVendasDoDiaPorCliente - 1 : this.pageVendasDoDiaPorCliente == 2 ? this.pageVendasDoDiaPorCliente - 2 : this.pageVendasDoDiaPorCliente - 3, this.pageVendasDoDiaPorCliente + 2);
+
+            this.scope.cpfVendasDoDiaPorCliente = undefined;
+            this.scope.dateVendasDoDiaPorCliente = undefined;
+            this.scope.vendasDoDiaPorClienteForm.$setPristine();
         });
     };
     private viewPageNavigationAnteriorVendasDoDiaPorCliente() {

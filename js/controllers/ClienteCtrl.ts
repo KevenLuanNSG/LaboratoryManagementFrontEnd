@@ -1,6 +1,6 @@
 import { IComponentController, IScope, IHttpService } from 'angular';
 
-interface IProdutoCtrl extends IScope {
+interface IClienteCtrl extends IScope {
     cadastrarCliente: any;
     buscarCliente: any;
     clienteAtualizarNome: any;
@@ -13,7 +13,7 @@ interface IProdutoCtrl extends IScope {
 class ClienteCtrl implements IComponentController {
     private static $inject = ['$scope', '$http'];
     private http: IHttpService;
-    private scope: IProdutoCtrl;
+    private scope: IClienteCtrl;
 
     private clientesInicio: boolean;
     private page: number;
@@ -34,7 +34,7 @@ class ClienteCtrl implements IComponentController {
 
     private viewSelecionado: string;
 
-    constructor($scope: IProdutoCtrl, $http: IHttpService) {
+    constructor($scope: IClienteCtrl, $http: IHttpService) {
         this.http = $http;
         this.scope = $scope;
 

@@ -109,10 +109,12 @@
 
     <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasDoDia'">
         <form name="vendasDoDiaForm">
-            <input class="form-control" type="date" ng-model="date" name="date" required="true" max="{{hoje}}" />
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">Data</span>
+            <input class="form-control" type="date" ng-model="dateVendasDoDia" name="date" required="true"
+                max="{{hoje}}" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.viewVendasDoDiaInicio(); ctrl.visualizarVendasDoDia(date)"
+            ng-click="ctrl.viewVendasDoDiaInicio(); ctrl.visualizarVendasDoDia(dateVendasDoDia)"
             ng-disabled="vendasDoDiaForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasDoDiaForm.date.$invalid && vendasDoDiaForm.date.$dirty" class="alert alert-danger">
             Data superior a data atual!
@@ -171,12 +173,15 @@
 
     <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasPorPeriodo'">
         <form name="vendasPorPeriodoForm">
-            <input class="form-control" type="date" ng-model="dateStart" name="dateStart" required="true"
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">Data Inicial</span>
+            <input class="form-control" type="date" ng-model="dateStartVendasPorPeriodo" name="dateStart"
+                required="true" max="{{hoje}}" />
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">Data Final</span>
+            <input class="form-control" type="date" ng-model="dateEndVendasPorPeriodo" name="dateEnd" required="true"
                 max="{{hoje}}" />
-            <input class="form-control" type="date" ng-model="dateEnd" name="dateEnd" required="true" max="{{hoje}}" />
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.viewVendasPorPeriodoInicio(); ctrl.visualizarVendasPorPeriodo(dateStart, dateEnd)"
+            ng-click="ctrl.viewVendasPorPeriodoInicio(); ctrl.visualizarVendasPorPeriodo(dateStartVendasPorPeriodo, dateEndVendasPorPeriodo)"
             ng-disabled="vendasPorPeriodoForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasPorPeriodoForm.dateStart.$invalid && vendasPorPeriodoForm.dateStart.$dirty"
             class="alert alert-danger">
@@ -242,6 +247,7 @@
 
     <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasPorCliente'">
         <form name="vendasPorClienteForm">
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">CPF do Cliente</span>
             <input class="form-control" type="text" ng-model="cpfVendasPorCliente" name="cpfVendasPorCliente"
                 placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/" required="true">
         </form>
@@ -304,12 +310,16 @@
 
     <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasDoDiaPorCliente'">
         <form name="vendasDoDiaPorClienteForm">
-            <input class="form-control" type="date" ng-model="date" name="date" required="true" max="{{hoje}}" />
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">Data</span>
+            <input class="form-control" type="date" ng-model="dateVendasDoDiaPorCliente" name="date" required="true"
+                max="{{hoje}}" />
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">CPF do Cliente</span>
+
             <input class="form-control" type="text" ng-model="cpfVendasDoDiaPorCliente" name="cpfVendasDoDiaPorCliente"
                 placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/" required="true">
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.viewVendasDoDiaPorClienteInicio(); ctrl.visualizarVendasDoDiaPorCliente(date, cpfVendasDoDiaPorCliente)"
+            ng-click="ctrl.viewVendasDoDiaPorClienteInicio(); ctrl.visualizarVendasDoDiaPorCliente(dateVendasDoDiaPorCliente, cpfVendasDoDiaPorCliente)"
             ng-disabled="vendasDoDiaPorClienteForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasDoDiaPorClienteForm.date.$invalid && vendasDoDiaPorClienteForm.date.$dirty"
             class="alert alert-danger">
@@ -374,17 +384,19 @@
 
     <div class="jumbotron" ng-show="ctrl.viewPagina == 'vendasPorPeriodoPorCliente'">
         <form name="vendasPorPeriodoPorClienteForm">
-            <input class="form-control" type="date" ng-model="dateStart" name="dateStart" required="true"
-                max="{{hoje}}" />
-
-            <input class="form-control" type="date" ng-model="dateEnd" name="dateEnd" required="true" max="{{hoje}}" />
-
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">Data Inicial</span>
+            <input class="form-control" type="date" ng-model="dateStartVendasPorPeriodoPorCliente" name="dateStart"
+                required="true" max="{{hoje}}" />
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">Data Final</span>
+            <input class="form-control" type="date" ng-model="dateEndVendasPorPeriodoPorCliente" name="dateEnd"
+                required="true" max="{{hoje}}" />
+            <span style="margin-bottom: 15px;" class="btn btn-secondary btn-block">CPF do Cliente</span>
             <input class="form-control" type="text" ng-model="cpfVendasPorPeriodoPorCliente"
                 name="cpfVendasPorPeriodoPorCliente" placeholder="CPF do Cliente" ng-pattern="/^\d{11}$/"
                 required="true">
         </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.viewVendasPorPeriodoPorClienteInicio(); ctrl.visualizarVendasPorPeriodoPorCliente(dateStart, dateEnd, cpfVendasPorPeriodoPorCliente)"
+            ng-click="ctrl.viewVendasPorPeriodoPorClienteInicio(); ctrl.visualizarVendasPorPeriodoPorCliente(dateStartVendasPorPeriodoPorCliente, dateEndVendasPorPeriodoPorCliente, cpfVendasPorPeriodoPorCliente)"
             ng-disabled="vendasPorPeriodoPorClienteForm.$invalid">Visualizar Vendas</button>
         <div ng-show="vendasPorPeriodoPorClienteForm.dateStart.$invalid && vendasPorPeriodoPorClienteForm.dateStart.$dirty"
             class="alert alert-danger">
@@ -550,7 +562,7 @@
             </div>
 
         </form>
-        
+
         <table class="table"
             ng-show="ctrl.produtoList.length != 0 || ctrl.produtoIndependenteList.length != 0 || ctrl.comboList.length != 0">
             <tr>
