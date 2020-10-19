@@ -1,0 +1,223 @@
+<div ng-controller="RegisterCtrl as ctrl">
+    <div id="navPage">
+        <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerSemester'">Semestre</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerLaboratory')">Laboratório</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerTeacher')">Professor</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerDiscipline')">Disciplina</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerClassOfStudents')">Turma</a>
+            </li>
+        </ul>
+    </div>
+
+    
+
+   
+
+    <div class="jumbotron" id="registerSemester" ng-show="ctrl.viewPage == 'registerSemester'">
+        <h4>Registrar Semestre</h4>
+        <form name="registerSemesterForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Data Inicial</button>
+            <input class="form-control" type="date" ng-model="semester.dateStart" name="dateStart"
+                ng-required="true">
+                <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Data Final</button>
+            <input class="form-control" type="date" ng-model="semester.dateEnd" name="dateEnd"
+                ng-required="true" />
+        </form>
+
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerSemester(semester)" ng-disabled="registerSemesterForm.$invalid || semester.dateStart > semester.dateEnd">Registrar
+            Semestre</button>
+
+        <div ng-show="semester.dateStart > semester.dateEnd" class="alert alert-danger">
+            Data inicial maior que data final
+        </div>
+        <table class="table" ng-show="ctrl.showSemesterRegistered">
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th><center>Data Inicial</center></th>
+                    <th><center>Data Final</center></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><center>{{ctrl.semesterRegistered.id}}</center></td>
+                    <td><center>{{ctrl.semesterRegistered.dateStart | date: 'dd/MM/yyyy'}}</center></td>
+                    <td><center>{{ctrl.semesterRegistered.dateEnd | date: 'dd/MM/yyyy'}}</center></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="registerLaboratory" ng-show="ctrl.viewPage == 'registerLaboratory'">
+        <h4>Registrar Laboratório</h4>
+        <form name="registerLaboratoryForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Nome</button>
+            <input class="form-control" type="text" ng-model="laboratory.name" name="name"
+            ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Bloco</button>
+            <input class="form-control" type="text" ng-model="laboratory.block" name="block"
+                ng-required="true">
+                <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Capacidade</button>
+            <input class="form-control" type="number" ng-model="laboratory.capacity" name="capacity"
+                ng-required="true" />
+        </form>
+
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerLaboratory(laboratory)" ng-disabled="registerLaboratoryForm.$invalid">Registrar
+            Laboratório</button>
+        <table class="table" ng-show="ctrl.showLaboratoryRegistered">
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th><center>Nome</center></th>
+                    <th><center>Bloco</center></th>
+                    <th><center>Capacidade</center></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><center>{{ctrl.laboratoryRegistered.id}}</center></td>
+                    <td><center>{{ctrl.laboratoryRegistered.name}}</center></td>
+                    <td><center>{{ctrl.laboratoryRegistered.block}}</center></td>
+                    <td><center>{{ctrl.laboratoryRegistered.capacity}}</center></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="registerTeacher" ng-show="ctrl.viewPage == 'registerTeacher'">
+        <h4>Registrar Professor</h4>
+        <form name="registerTeacherForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Nome</button>
+            <input class="form-control" type="text" ng-model="teacher.name" name="name"
+            ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">CPF</button>
+            <input class="form-control" type="text" ng-model="teacher.cpf" name="cpf"
+                ng-required="true" ng-pattern="/^\d{11}$/">
+                <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Senha</button>
+            <input class="form-control" type="text" ng-model="teacher.password" name="password"
+                ng-required="true" />
+        </form>
+
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerTeacher(teacher)" ng-disabled="registerTeacherForm.$invalid">Registrar
+            Professor</button>
+        <table class="table" ng-show="ctrl.showTeacherRegistered">
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th><center>Nome</center></th>
+                    <th><center>CPF</center></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><center>{{ctrl.teacherRegistered.id}}</center></td>
+                    <td><center>{{ctrl.teacherRegistered.name}}</center></td>
+                    <td><center>{{ctrl.teacherRegistered.cpf | cpfFilter}}</center></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="registerDiscipline" ng-show="ctrl.viewPage == 'registerDiscipline'">
+        <h4>Registrar Disciplina</h4>
+        <form name="registerDisciplineForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Nome</button>
+            <input class="form-control" type="text" ng-model="discipline.name" name="name"
+            ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">ID do Professor</button>
+            <input class="form-control" type="text" ng-model="discipline.teacher.id" name="teacherId">
+        </form>
+
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerDiscipline(discipline)" ng-disabled="registerDisciplineForm.$invalid">Registrar
+            Disciplina</button>
+        <table class="table" ng-show="ctrl.showDisciplineRegistered">
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th><center>Nome</center></th>
+                    <th><center>Professor</center></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><center>{{ctrl.disciplineRegistered.id}}</center></td>
+                    <td><center>{{ctrl.disciplineRegistered.name}}</center></td>
+                    <td><center>
+                        <div ng-show="ctrl.disciplineRegistered.teacher != null">{{ctrl.disciplineRegistered.teacher.id}}</div>
+                        <div ng-show="ctrl.disciplineRegistered.teacher == null"> -- </div>
+                    </center></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="registerClassOfStudents" ng-show="ctrl.viewPage == 'registerClassOfStudents'">
+        <h4>Registrar Disciplina</h4>
+        <form name="registerClassOfStudentsForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Nome</button>
+            <input class="form-control" type="text" ng-model="classOfStudents.name" name="name"
+            ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Quantidade de Alunos</button>
+            <input class="form-control" type="number" ng-model="classOfStudents.numberOfStudents" name="numberOfStudents" required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Periodo</button>
+            <select class="form-control custom-select mr-sm-2" ng-model="classOfStudents.period" name="period" required="true">
+                <option value="">Selecione um Periodo</option>
+                <option value="First">Primeiro</option>
+                <option value="Second">Segundo</option>
+                <option value="Third">Terceiro</option>
+                <option value="Fourth">Quarto</option>
+                <option value="Fifth">Quinto</option>
+                <option value="Sixth">Sexto</option>
+                <option value="Seventh">Setimo</option>
+                <option value="Eighth">Oitavo</option>
+                <option value="Ninth">Nono</option>
+                <option value="Tenth">Decimo</option>
+            </select>
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerClassOfStudents(classOfStudents)" ng-disabled="registerClassOfStudentsForm.$invalid">Registrar
+            Disciplina</button>
+        <table class="table" ng-show="ctrl.showClassOfStudentsRegistered">
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th><center>Nome</center></th>
+                    <th><center>Quantidade de Estudantes</center></th>
+                    <th><center>Periodo</center></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><center>{{ctrl.classOfStudentsRegistered.id}}</center></td>
+                    <td><center>{{ctrl.classOfStudentsRegistered.name}}</center></td>
+                    <td><center>{{ctrl.classOfStudentsRegistered.numberOfStudents}}</center></td>
+                    <td><center>{{ctrl.classOfStudentsRegistered.period}}</center></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

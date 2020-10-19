@@ -1,0 +1,26 @@
+<div ng-controller="LaboratoryCtrl as ctrl">
+
+    <div class="jumbotron" id="laboratories">
+        <div ng-show="ctrl.laboratories.length == 0"><span class="alert alert-danger">Nenhum laboratório cadastrado</span></div>
+        <button id="nameInput" class="btn btn-primary btn-block" ng-disabled="true">Laboratórios</button>
+        <table class="table" ng-show="ctrl.laboratories.length > 0">
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th><center>Nome</center></th>
+                    <th><center>Bloco</center></th>
+                    <th><center>Capacidade</center></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="laboratory in ctrl.laboratories">
+                    <td><center>{{laboratory.id}}</center></td>
+                    <td><center>{{laboratory.name}}</center></td>
+                    <td><center>{{laboratory.block}}</center></td>
+                    <td><center>{{laboratory.capacity}}</center></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

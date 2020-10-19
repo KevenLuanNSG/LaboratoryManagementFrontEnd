@@ -1,0 +1,327 @@
+<div ng-controller="RegisterScheduleCtrl as ctrl">
+    <div id="navPage">
+        <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerSchedule')">Agenda Simples</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('cancelSchedule')">Cancelar Agenda Simples</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('registerRecurrentSchedule')">Agenda Recorrente</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('cancelRecurrentSchedule')">Cancelar Agenda Recorrente</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="jumbotron" id="registerSchedule" ng-show="ctrl.viewPage == 'registerSchedule'">
+        <h4>Agenda Simples</h4>
+        <form name="registerScheduleForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Agenda</button>
+            <input class="form-control" type="number" ng-model="schedule.id" name="id" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Semestre</button>
+            <input class="form-control" type="number" ng-model="schedule.semester.id" name="semesterId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Laboratório</button>
+            <input class="form-control" type="number" ng-model="schedule.laboratory.id" name="laboratoryId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Professor</button>
+            <input class="form-control" type="number" ng-model="schedule.teacher.id" name="teacherId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Disciplina</button>
+            <input class="form-control" type="number" ng-model="schedule.discipline.id" name="disciplineId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="schedule.classOfStudents.id" name="classOsStudentsId" ng-required="true">
+        </form>
+
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerSchedule(schedule)" ng-disabled="registerScheduleForm.$invalid">Agendar</button>
+        <table class="table" ng-show="ctrl.showScheduleRegistered">
+            <thead>
+                <tr>
+                    <th>
+                        <center>ID</center>
+                    </th>
+                    <th>
+                        <center>Data</center>
+                    </th>
+                    <th>
+                        <center>Periodo</center>
+                    </th>
+                    <th>
+                        <center>Horário</center>
+                    </th>
+                    <th>
+                        <center>Disponibilidade</center>
+                    </th>
+                    <th>
+                        <center>Laboratório</center>
+                    </th>
+                    <th>
+                        <center>Professor</center>
+                    </th>
+                    <th>
+                        <center>Turma</center>
+                    </th>
+                    <th>
+                        <center>Disciplina</center>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <center>{{ctrl.scheduleRegistered.id}}</center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleRegistered.date | date: 'dd/MM/yyyy'}}</center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleRegistered.shift}}</center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleRegistered.scheduleTime}}</center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleRegistered.available" class="badge badge-success">Disponível</div>
+                            <div ng-show="!ctrl.scheduleRegistered.available" class="badge badge-danger">Indisponível</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleRegistered.laboratory.name}}</center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleRegistered.teacher != null">{{ctrl.scheduleRegistered.teacher.name}}</div>
+                            <div ng-show="ctrl.scheduleRegistered.teacher == null">--</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleRegistered.classOfStudents != null">
+                                {{ctrl.scheduleRegistered.classOfStudents.name}}</div>
+                            <div ng-show="ctrl.scheduleRegistered.classOfStudents == null">--</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleRegistered.discipline != null">{{ctrl.scheduleRegistered.discipline.name}}
+                            </div>
+                            <div ng-show="ctrl.scheduleRegistered.discipline == null">--</div>
+                        </center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="cancelSchedule" ng-show="ctrl.viewPage == 'cancelSchedule'">
+        <h4>Agenda Simples</h4>
+        <form name="cancelScheduleForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Agenda</button>
+            <input class="form-control" type="number" ng-model="scheduleToCancel" name="id" ng-required="true">
+            </form>
+
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.cancelSchedule(scheduleToCancel)" ng-disabled="cancelScheduleForm.$invalid">Cancelar</button>
+        <table class="table" ng-show="ctrl.showScheduleCanceled">
+            <thead>
+                <tr>
+                    <th>
+                        <center>ID</center>
+                    </th>
+                    <th>
+                        <center>Data</center>
+                    </th>
+                    <th>
+                        <center>Periodo</center>
+                    </th>
+                    <th>
+                        <center>Horário</center>
+                    </th>
+                    <th>
+                        <center>Disponibilidade</center>
+                    </th>
+                    <th>
+                        <center>Laboratório</center>
+                    </th>
+                    <th>
+                        <center>Professor</center>
+                    </th>
+                    <th>
+                        <center>Turma</center>
+                    </th>
+                    <th>
+                        <center>Disciplina</center>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <center>{{ctrl.scheduleCanceled.id}}</center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleCanceled.date | date: 'dd/MM/yyyy'}}</center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleCanceled.shift}}</center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleCanceled.scheduleTime}}</center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleCanceled.available" class="badge badge-success">Disponível</div>
+                            <div ng-show="!ctrl.scheduleCanceled.available" class="badge badge-danger">Indisponível</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>{{ctrl.scheduleCanceled.laboratory.name}}</center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleCanceled.teacher != null">{{ctrl.scheduleCanceled.teacher.name}}</div>
+                            <div ng-show="ctrl.scheduleCanceled.teacher == null">--</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleCanceled.classOfStudents != null">
+                                {{ctrl.scheduleCanceled.classOfStudents.name}}</div>
+                            <div ng-show="ctrl.scheduleCanceled.classOfStudents == null">--</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="ctrl.scheduleCanceled.discipline != null">{{ctrl.scheduleCanceled.discipline.name}}
+                            </div>
+                            <div ng-show="ctrl.scheduleCanceled.discipline == null">--</div>
+                        </center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="registerRecurrentSchedule" ng-show="ctrl.viewPage == 'registerRecurrentSchedule'">
+        <h4>Agenda Recorrente</h4>
+        <form name="registerRecurrentScheduleForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Agenda</button>
+            <input class="form-control" type="number" ng-model="recurrentSchedule.id" name="id" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Semestre</button>
+            <input class="form-control" type="number" ng-model="recurrentSchedule.semester.id" name="semesterId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Laboratório</button>
+            <input class="form-control" type="number" ng-model="recurrentSchedule.laboratory.id" name="laboratoryId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Professor</button>
+            <input class="form-control" type="number" ng-model="recurrentSchedule.teacher.id" name="teacherId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Disciplina</button>
+            <input class="form-control" type="number" ng-model="recurrentSchedule.discipline.id" name="disciplineId" ng-required="true">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="recurrentSchedule.classOfStudents.id" name="classOsStudentsId" ng-required="true">
+        </form>
+
+        <button style="margin-bottom: 30px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.registerRecurrentSchedule(recurrentSchedule)" ng-disabled="registerRecurrentScheduleForm.$invalid">Agendar</button>
+        <span class="alert alert-danger">Esse tipo de agendamento irá agendar um laboratório no mesmo dia da semana, periodo e horario para todas as semanas até o fim do semestre</span>
+        <div style="margin-top: 15px;" ng-show="ctrl.recurrentScheduleFailed.length > 0"><h4>Lista de todos os agendamentos que não foram possíveis realizar uma agenda</h4></div>
+        <table class="table" style="margin-top: 5px;" ng-show="ctrl.recurrentScheduleFailed.length > 0">
+            <thead>
+                <tr>
+                    <th>
+                        <center>ID</center>
+                    </th>
+                    <th>
+                        <center>Data</center>
+                    </th>
+                    <th>
+                        <center>Periodo</center>
+                    </th>
+                    <th>
+                        <center>Horário</center>
+                    </th>
+                    <th>
+                        <center>Disponibilidade</center>
+                    </th>
+                    <th>
+                        <center>Laboratório</center>
+                    </th>
+                    <th>
+                        <center>Professor</center>
+                    </th>
+                    <th>
+                        <center>Turma</center>
+                    </th>
+                    <th>
+                        <center>Disciplina</center>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="schedule in ctrl.recurrentScheduleFailed">
+                    <td>
+                        <center>{{schedule.id}}</center>
+                    </td>
+                    <td>
+                        <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                    </td>
+                    <td>
+                        <center>{{schedule.shift}}</center>
+                    </td>
+                    <td>
+                        <center>{{schedule.scheduleTime}}</center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                            <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>{{schedule.laboratory.name}}</center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                            <div ng-show="schedule.teacher == null">--</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="schedule.classOfStudents != null">
+                                {{schedule.classOfStudents.name}}</div>
+                            <div ng-show="schedule.classOfStudents == null">--</div>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}
+                            </div>
+                            <div ng-show="schedule.discipline == null">--</div>
+                        </center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="jumbotron" id="cancelRecurrentSchedule" ng-show="ctrl.viewPage == 'cancelRecurrentSchedule'">
+        <h4>Agenda Recorrente</h4>
+        <form name="cancelScheduleForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Agenda</button>
+            <input class="form-control" type="number" ng-model="recurrentScheduleToCancel" name="id" ng-required="true">
+            </form>
+
+        <button style="margin-bottom: 30px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.cancelRecurrentSchedule(recurrentScheduleToCancel)" ng-disabled="cancelScheduleForm.$invalid">Cancelar Agenda Recorrente</button>
+            <span class="alert alert-danger">Esse tipo de cancelamento irá cancelar todos as agendas nesse dia da semana, periodo e horário até o fim do semestre</span>
+        <div ng-show="ctrl.recurrentScheduleCanceled != null" class="alert alert-success">Todos as suas agendas nesse dia da semana, periodo e horário formam canceladas a apartir de hoje.</div>
+    </div>
+</div>

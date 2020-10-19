@@ -2,19 +2,22 @@ configRoutes.$inject=["$routeProvider"];
 function configRoutes($routeProvider: ng.route.IRouteProvider){
   $routeProvider
     .when("/", {
-      templateUrl: "../../view/cardapio.html"
+      templateUrl: "../../view/schedules.html"
     })
-    .when("/produtos", {
-      templateUrl: "../../view/produtos.html"
+    .when("/schedules", {
+      templateUrl: "../../view/schedules.html"
     })
-    .when("/clientes", {
-      templateUrl: "../../view/clientes.html"
+    .when("/register", {
+      templateUrl: "../../view/register.html"
     })
-    .when("/ingredientes", {
-      templateUrl: "../../view/ingredientes.html"
+    .when("/auto-generator", {
+      templateUrl: "../../view/generator.html"
     })
-    .when("/venda", {
-      templateUrl: "../../view/venda.html"
+    .when("/to-schedule", {
+      templateUrl: "../../view/to-schedule.html"
+    })    
+    .when("/laboratory", {
+      templateUrl: "../../view/laboratory.html"
     });
 }
 export default configRoutes;

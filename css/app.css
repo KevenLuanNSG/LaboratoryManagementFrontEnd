@@ -1,5 +1,5 @@
 body{
-    background: url("..//view/images/planoDeFunco.jpg") no-repeat center top  fixed;
+    background: url("..//view/images/planoDeFundo.jpeg") no-repeat center top  fixed;
     height: 100%;
     width: 100%;
 
@@ -27,6 +27,12 @@ body{
     background-color: #003a77;
 }
 
+#nameInput {
+    opacity: 1;
+    margin-bottom: 15px; 
+    background-color: #343a40; 
+    border-color: #343a40;
+}
 
 .jumbotron {
     width: 80%;
@@ -34,6 +40,7 @@ body{
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
+    background-color: #dadada;
 }
 
 .table {
@@ -44,20 +51,8 @@ body{
     margin-bottom: 5px;
 }
 
-.selecionado {
-    background-color: yellow;
-}
-
-.negrito {
-    font-weight: bold;
-}
-
 hr {
     border-color: #999;
-}
-
-#buttonRealizarVenda {
-    margin-bottom: 15px;
 }
 
 .bd-placeholder-img {

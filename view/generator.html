@@ -1,0 +1,20 @@
+<div ng-controller="GeneratorSchedulesCtrl as ctrl">
+
+    <div class="jumbotron" id="generator">
+
+        <form name="generatorSchedulesForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Semestre</button>
+            <input class="form-control" type="number" ng-model="semester" name="semester"
+            ng-required="true">
+        </form>
+
+        <button style="margin-bottom: 30px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.generatorSchedules(semester)" ng-disabled="generatorSchedulesForm.$invalid">Gerar agenda semestral</button>
+
+            <div><span class="alert alert-success" ng-show="ctrl.showSuccess">
+                {{ctrl.success}}
+            </span></div>
+            
+    </div>
+
+</div>
