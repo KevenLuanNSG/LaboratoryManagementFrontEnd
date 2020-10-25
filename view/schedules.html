@@ -7,15 +7,15 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="ctrl.selectView('laboratory', '')">Agendas por Laboratório</a>
+                    ng-click="ctrl.selectView('laboratory', 'allScheduleByLaboratory')">Agendas por Laboratório</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="ctrl.selectView('teacher', 'all')">Agendas por Professor</a>
+                    ng-click="ctrl.selectView('teacher', 'allScheduleByTeacher')">Agendas por Professor</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="ctrl.selectView('classOfStudents', '')">Agendas por Turma</a>
+                    ng-click="ctrl.selectView('classOfStudents', 'allScheduleByClassOfStudents')">Agendas por Turma</a>
             </li>
         </ul>
     </div>
@@ -38,9 +38,26 @@
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
                     ng-click="ctrl.selectView('schedule', 'scheduleByShift')">Periodo</a>
             </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="ctrl.viewSelected == 'classOfStudents'">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="ctrl.selectView('schedule', 'scheduleByShiftAndScheduleTime')">Periodo/Horário</a>
+                    ng-click="ctrl.selectView('classOfStudents', 'allScheduleByClassOfStudents')">Todas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('classOfStudents', 'scheduleByClassOfStudentsAndDate')">Data</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('classOfStudents', 'scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime')">Data/Periodo/Horário</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('classOfStudents', 'scheduleByClassOfStudentsAndTeacher')">Professor</a>
             </li>
         </ul>
     </div>
@@ -49,7 +66,7 @@
         <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="ctrl.viewSelected == 'teacher'">
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="ctrl.selectView('teacher', 'all')">Todas</a>
+                    ng-click="ctrl.selectView('teacher', 'allScheduleByTeacher')">Todas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
@@ -61,7 +78,20 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
-                    ng-click="ctrl.selectView('teacher', 'scheduleByTeacherAndClassOfStudents')">Turma</a>
+                    ng-click="ctrl.selectView('teacher', 'scheduleByTeacherAndClass')">Turma</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul class="nav nav-pills nav-justified" id="navFunction" ng-show="ctrl.viewSelected == 'laboratory'">
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('laboratory', 'allScheduleByLaboratory')">Todas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="border-radius: 0px;" data-toggle="pill"
+                    ng-click="ctrl.selectView('laboratory', 'scheduleByLaboratoryAndDate')">Data</a>
             </li>
         </ul>
     </div>
@@ -454,121 +484,7 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-show="ctrl.viewPage == 'scheduleByShiftAndScheduleTime'">
-        <form name="scheduleByShiftAndScheduleTimeForm">
-            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Periodo</button>
-            <input class="form-control" type="text" ng-model="shiftScheduleByShiftAndScheduleTime" name="shift" required="true"/>
-            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Periodo</button>
-            <input class="form-control" type="text" ng-model="scheduleTimeScheduleByShiftAndScheduleTime" name="scheduleTime" required="true"/>
-        </form>
-        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
-            ng-click="ctrl.viewScheduleByShiftAndScheduleTimeStart(); ctrl.viewScheduleByShiftAndScheduleTime(shiftScheduleByShiftAndScheduleTime, scheduleTimeScheduleByShiftAndScheduleTime)"
-            ng-disabled="scheduleByShiftAndScheduleTimeForm.$invalid">Visualizar Agenda</button>
-        <div ng-show="ctrl.scheduleByShiftAndScheduleTime.length == 0 && ctrl.viewPage == 'scheduleByShiftAndScheduleTime'">
-            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda neste periodo!</div>
-        </div>
-        <div ng-show="ctrl.scheduleByShiftAndScheduleTime.length > 0 && ctrl.viewPage == 'scheduleByShiftAndScheduleTime'">
-            <h4>Periodo: {{ctrl.shiftScheduleByShiftAndScheduleTime}} -- Horário: {{ctrl.scheduleTimeScheduleByShiftAndScheduleTime}}</h4>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <center>ID</center>
-                        </th>
-                        <th>
-                            <center>Data</center>
-                        </th>
-                        <th>
-                            <center>Periodo</center>
-                        </th>
-                        <th>
-                            <center>Horário</center>
-                        </th>
-                        <th>
-                            <center>Disponibilidade</center>
-                        </th>
-                        <th>
-                            <center>Laboratório</center>
-                        </th>
-                        <th>
-                            <center>Professor</center>
-                        </th>
-                        <th>
-                            <center>Turma</center>
-                        </th>
-                        <th>
-                            <center>Disciplina</center>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="schedule in ctrl.scheduleByShiftAndScheduleTime">
-                        <td>
-                            <center>{{schedule.id}}</center>
-                        </td>
-                        <td>
-                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
-                        </td>
-                        <td>
-                            <center>{{schedule.shift}}</center>
-                        </td>
-                        <td>
-                            <center>{{schedule.scheduleTime}}</center>
-                        </td>
-                        <td>
-                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
-                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
-                            </center>
-                       </td>
-                        <td>
-                            <center>{{schedule.laboratory.name}}</center>
-                        </td>
-                        <td>
-                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
-                                <div ng-show="schedule.teacher == null">--</div>
-                            </center>
-                         </td>
-                        <td>
-                            <center>
-                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
-                                <div ng-show="schedule.classOfStudents == null">--</div>
-                            </center>
-                        </td>
-                        <td>
-                            <center>
-                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
-                                <div ng-show="schedule.discipline == null">--</div>
-                            </center>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="row lanc-list-pagination">
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li ng-class="{ 'disabled': ctrl.paginationFirstScheduleByShiftAndScheduleTime}" class="page-item">
-                            <button type="button" ng-disabled="ctrl.paginationFirstScheduleByShiftAndScheduleTime"
-                                ng-click="ctrl.viewPageNavigationLeftScheduleByShiftAndScheduleTime()"
-                                class="page-link">Anterior</button>
-                        </li>
-                        <li ng-repeat="viewPageScheduleByShiftAndScheduleTime in ctrl.paginationScheduleByShiftAndScheduleTime"
-                            ng-class="{'active':ctrl.pageScheduleByShiftAndScheduleTime == viewPageScheduleByShiftAndScheduleTime}" class="page-item">
-                            <a class="page-link"
-                                ng-click="ctrl.viewPageNavigationScheduleByShiftAndScheduleTime(viewPageScheduleByShiftAndScheduleTime)">{{viewPageScheduleByShiftAndScheduleTime}}</a>
-                        </li>
-                        <li ng-class="{ 'disabled': ctrl.paginationLastScheduleByShiftAndScheduleTime}" class="page-item">
-                            <button type="button" ng-disabled="ctrl.paginationLastScheduleByShiftAndScheduleTime"
-                                ng-click="ctrl.viewPageNavigationRightScheduleByShiftAndScheduleTime()"
-                                class="page-link">Próxima</button>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <div class="jumbotron" ng-show="ctrl.viewPage == 'all'">
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'allScheduleByTeacher'">
         <form name="scheduleByTeacherForm">
             <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Professor</button>
             <input class="form-control" type="number" ng-model="scheduleByTeacher.teacher" name="teacher" required="true"/>
@@ -579,7 +495,7 @@
         <div ng-show="ctrl.scheduleByTeacher.length == 0 && ctrl.viewPage == 'scheduleByTeacher'">
             <div class="alert alert-danger"> Não foi encontrado nenhuma agenda neste periodo!</div>
         </div>
-        <div ng-show="ctrl.scheduleByTeacher.length > 0 && ctrl.viewPage == 'all'">
+        <div ng-show="ctrl.scheduleByTeacher.length > 0 && ctrl.viewPage == 'allScheduleByTeacher'">
             <table class="table">
                 <thead>
                     <tr>
@@ -780,12 +696,12 @@
             <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Periodo</button>
             <input class="form-control" type="text" ng-model="scheduleByTeacherAndDateAndShiftAndScheduleTime.shift" name="shift" required="true" placeholder="Periodo"/>
             <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Horario</button>
-            <input class="form-control" type="text" ng-model="scheduleByTeacherAndDateAndShiftAndScheduleTime.scheduleTime" name="scheduleTime" required="true" placeholder="Horário"/>
-            </form>
+            <input class="form-control" type="text" ng-model="scheduleByTeacherAndDateAndShiftAndScheduleTime.scheduleTime" name="scheduleTime" required="true" placeholder="Horario"/>
+        </form>
         <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
             ng-click="ctrl.viewScheduleByTeacherAndDateAndShiftAndScheduleTime(scheduleByTeacherAndDateAndShiftAndScheduleTime)" ng-disabled="scheduleByTeacherAndDateAndShiftAndScheduleTimeForm.$invalid">Visualizar
             Agenda</button>
-        <div ng-show="ctrl.scheduleByTeacherAndDateAndShiftAndScheduleTime.length == 0 && ctrl.viewPage == 'scheduleByTeacherAndDateAndShiftAndScheduleTime'">
+        <div ng-show="ctrl.scheduleByTeacherDateAndShiftAndScheduleTime.length == 0 && ctrl.viewPage == 'scheduleByTeacherAndDateAndShiftAndScheduleTime'">
             <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
         </div>
         <div ng-show="ctrl.scheduleByTeacherAndDateAndShiftAndScheduleTime.length > 0 && ctrl.viewPage == 'scheduleByTeacherAndDateAndShiftAndScheduleTime'">
@@ -865,7 +781,689 @@
             </table>
         </div>
     </div>
+    
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'scheduleByTeacherAndClass'">
+        <form name="scheduleByTeacherAndClassForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Professor</button>
+            <input class="form-control" type="number" ng-model="scheduleByTeacherAndClass.teacher" name="teacher" required="true" placeholder="Professor"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="scheduleByTeacherAndClass.class" name="class" required="true" placeholder="Turma"/>
+            </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByTeacherAndClass(scheduleByTeacherAndClass)" ng-disabled="scheduleByTeacherAndClassForm.$invalid">Visualizar
+            Agenda</button>
+        <div ng-show="ctrl.scheduleByTeacherAndClass.length == 0 && ctrl.viewPage == 'scheduleByTeacherAndClass'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByTeacherAndClass.length > 0 && ctrl.viewPage == 'scheduleByTeacherAndClass'">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByTeacherAndClass">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'allScheduleByLaboratory'">
+        <form name="scheduleByLaboratoryForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Laboratório</button>
+            <input class="form-control" type="number" ng-model="scheduleByLaboratory.laboratory" name="laboratory" required="true"/>
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByLaboratoryStart(); ctrl.viewScheduleByLaboratory(scheduleByLaboratory.laboratory)"
+            ng-disabled="scheduleByLaboratoryForm.$invalid">Visualizar Agenda</button>
+        <div ng-show="ctrl.scheduleByLaboratory.length == 0 && ctrl.viewPage == 'scheduleByLaboratory'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda neste periodo!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByLaboratory.length > 0 && ctrl.viewPage == 'allScheduleByLaboratory'">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByLaboratory">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstScheduleByLaboratory}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstScheduleByLaboratory"
+                                ng-click="ctrl.viewPageNavigationLeftScheduleByLaboratory()"
+                                class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageScheduleByLaboratory in ctrl.paginationScheduleByLaboratory"
+                            ng-class="{'active':ctrl.pageScheduleByLaboratory == viewPageScheduleByLaboratory}" class="page-item">
+                            <a class="page-link"
+                                ng-click="ctrl.viewPageNavigationScheduleByLaboratory(viewPageScheduleByLaboratory)">{{viewPageScheduleByLaboratory}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': ctrl.paginationLastScheduleByLaboratory}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastScheduleByLaboratory"
+                                ng-click="ctrl.viewPageNavigationRightScheduleByLaboratory()"
+                                class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'scheduleByLaboratoryAndDate'">
+        <form name="scheduleByLaboratoryAndDateForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Laboratório</button>
+            <input class="form-control" type="number" ng-model="scheduleByLaboratoryAndDate.laboratory" name="laboratory" required="true" placeholder="Laboratório"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Data</button>
+            <input class="form-control" type="date" ng-model="scheduleByLaboratoryAndDate.date" name="date" required="true" placeholder="Data"/>
+            </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByLaboratoryAndDate(scheduleByLaboratoryAndDate)" ng-disabled="scheduleByLaboratoryAndDateForm.$invalid">Visualizar
+            Agenda</button>
+        <div ng-show="ctrl.scheduleByLaboratoryAndDate.length == 0 && ctrl.viewPage == 'scheduleByLaboratoryAndDate'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByLaboratoryAndDate.length > 0 && ctrl.viewPage == 'scheduleByLaboratoryAndDate'">
+            <h4>Agenda do dia {{ctrl.dateScheduleByLaboratoryAndDate | date: 'dd/MM/yyyy'}}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByLaboratoryAndDate">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'allScheduleByClassOfStudents'">
+        <form name="scheduleByClassOfStudentsForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="scheduleByClassOfStudents.classOfStudents" name="classOfStudents" required="true"/>
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByClassOfStudentsStart(); ctrl.viewScheduleByClassOfStudents(scheduleByClassOfStudents.classOfStudents)"
+            ng-disabled="scheduleByClassOfStudentsForm.$invalid">Visualizar Agenda</button>
+        <div ng-show="ctrl.scheduleByClassOfStudents.length == 0 && ctrl.viewPage == 'scheduleByClassOfStudents'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda neste periodo!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByClassOfStudents.length > 0 && ctrl.viewPage == 'allScheduleByClassOfStudents'">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByClassOfStudents">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row lanc-list-pagination">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li ng-class="{ 'disabled': ctrl.paginationFirstScheduleByClassOfStudents}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationFirstScheduleByClassOfStudents"
+                                ng-click="ctrl.viewPageNavigationLeftScheduleByClassOfStudents()"
+                                class="page-link">Anterior</button>
+                        </li>
+                        <li ng-repeat="viewPageScheduleByClassOfStudents in ctrl.paginationScheduleByClassOfStudents"
+                            ng-class="{'active':ctrl.pageScheduleByClassOfStudents == viewPageScheduleByClassOfStudents}" class="page-item">
+                            <a class="page-link"
+                                ng-click="ctrl.viewPageNavigationScheduleByClassOfStudents(viewPageScheduleByClassOfStudents)">{{viewPageScheduleByClassOfStudents}}</a>
+                        </li>
+                        <li ng-class="{ 'disabled': ctrl.paginationLastScheduleByClassOfStudents}" class="page-item">
+                            <button type="button" ng-disabled="ctrl.paginationLastScheduleByClassOfStudents"
+                                ng-click="ctrl.viewPageNavigationRightScheduleByClassOfStudents()"
+                                class="page-link">Próxima</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'scheduleByClassOfStudentsAndDate'">
+        <form name="scheduleByClassOfStudentsAndDateForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="scheduleByClassOfStudentsAndDate.classOfStudents" name="classOfStudents" required="true" placeholder="Turma"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Data</button>
+            <input class="form-control" type="date" ng-model="scheduleByClassOfStudentsAndDate.date" name="date" required="true" placeholder="Data"/>
+            </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByClassOfStudentsAndDate(scheduleByClassOfStudentsAndDate)" ng-disabled="scheduleByClassOfStudentsAndDateForm.$invalid">Visualizar
+            Agenda</button>
+        <div ng-show="ctrl.scheduleByClassOfStudentsAndDate.length == 0 && ctrl.viewPage == 'scheduleByClassOfStudentsAndDate'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByClassOfStudentsAndDate.length > 0 && ctrl.viewPage == 'scheduleByClassOfStudentsAndDate'">
+            <h4>Agenda do dia {{ctrl.dateScheduleByClassOfStudentsAndDate | date: 'dd/MM/yyyy'}}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByClassOfStudentsAndDate">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime'">
+        <form name="scheduleByClassOfStudentsAndDateAndShiftAndScheduleTimeForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.classOfStudents" name="classOfStudents" required="true" placeholder="Turma"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Data</button>
+            <input class="form-control" type="date" ng-model="scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.date" name="date" required="true" placeholder="Data"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Periodo</button>
+            <input class="form-control" type="text" ng-model="scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.shift" name="shift" required="true" placeholder="Periodo"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Horario</button>
+            <input class="form-control" type="text" ng-model="scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.scheduleTime" name="scheduleTime" required="true" placeholder="Horario"/>
+        </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByClassOfStudentsAndDateAndShiftAndScheduleTime(scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime)" ng-disabled="scheduleByClassOfStudentsAndDateAndShiftAndScheduleTimeForm.$invalid">Visualizar
+            Agenda</button>
+        <div ng-show="ctrl.scheduleByClassOfStudentsDateAndShiftAndScheduleTime.length == 0 && ctrl.viewPage == 'scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.length > 0 && ctrl.viewPage == 'scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime'">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="jumbotron" ng-show="ctrl.viewPage == 'scheduleByClassOfStudentsAndTeacher'">
+        <form name="scheduleByClassOfStudentsAndTeacherForm">
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Turma</button>
+            <input class="form-control" type="number" ng-model="scheduleByClassOfStudentsAndTeacher.class" name="class" required="true" placeholder="Turma"/>
+            <button id="nameInput" class="btn btn-secondary btn-block" ng-disabled="true">Professor</button>
+            <input class="form-control" type="number" ng-model="scheduleByClassOfStudentsAndTeacher.teacher" name="teacher" required="true" placeholder="Professor"/>
+            </form>
+        <button style="margin-bottom: 15px;" class="btn btn-primary btn-block"
+            ng-click="ctrl.viewScheduleByClassOfStudentsAndTeacher(scheduleByClassOfStudentsAndTeacher)" ng-disabled="scheduleByClassOfStudentsAndClassForm.$invalid">Visualizar
+            Agenda</button>
+        <div ng-show="ctrl.scheduleByClassOfStudentsAndTeacher.length == 0 && ctrl.viewPage == 'scheduleByClassOfStudentsAndTeacher'">
+            <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
+        </div>
+        <div ng-show="ctrl.scheduleByClassOfStudentsAndTeacher.length > 0 && ctrl.viewPage == 'scheduleByClassOfStudentsAndTeacher'">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>ID</center>
+                        </th>
+                        <th>
+                            <center>Data</center>
+                        </th>
+                        <th>
+                            <center>Periodo</center>
+                        </th>
+                        <th>
+                            <center>Horário</center>
+                        </th>
+                        <th>
+                            <center>Disponibilidade</center>
+                        </th>
+                        <th>
+                            <center>Laboratório</center>
+                        </th>
+                        <th>
+                            <center>Professor</center>
+                        </th>
+                        <th>
+                            <center>Turma</center>
+                        </th>
+                        <th>
+                            <center>Disciplina</center>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schedule in ctrl.scheduleByClassOfStudentsAndTeacher">
+                        <td>
+                            <center>{{schedule.id}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.date | date: 'dd/MM/yyyy'}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.shift}}</center>
+                        </td>
+                        <td>
+                            <center>{{schedule.scheduleTime}}</center>
+                        </td>
+                        <td>
+                            <center>     <div ng-show="schedule.available" class="badge badge-success">Disponível</div>
+                                <div ng-show="!schedule.available" class="badge badge-danger">Indisponível</div>
+                            </center>
+                       </td>
+                        <td>
+                            <center>{{schedule.laboratory.name}}</center>
+                        </td>
+                        <td>
+                            <center>   <div ng-show="schedule.teacher != null">{{schedule.teacher.name}}</div>
+                                <div ng-show="schedule.teacher == null">--</div>
+                            </center>
+                         </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.classOfStudents != null">{{schedule.classOfStudents.name}}</div>
+                                <div ng-show="schedule.classOfStudents == null">--</div>
+                            </center>
+                        </td>
+                        <td>
+                            <center>
+                                <div ng-show="schedule.discipline != null">{{schedule.discipline.name}}</div>
+                                <div ng-show="schedule.discipline == null">--</div>
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <div class="jumbotron" ng-show="ctrl.viewPage == 'initialPage'">
 
@@ -873,7 +1471,7 @@
             <div class="alert alert-danger"> Não foi encontrado nenhuma agenda para este dia!</div>
         </div>
         <div ng-show="ctrl.initialPage.length > 0 && ctrl.viewPage == 'initialPage'">
-            <h4>Agenda do dia {{ctrl.dateInitialPage | date: 'dd/MM/yyyy'}}</h4>
+            <h4>Agenda do dia {{ctrl.dateInitialPage | date: 'dd/MM/yyyy'}} para horário atual</h4>
             <table class="table">
                 <thead>
                     <tr>

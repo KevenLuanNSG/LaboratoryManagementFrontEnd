@@ -28,6 +28,27 @@ interface IScheduleCtrl extends IScope {
 
     scheduleByTeacherAndDateAndShiftAndScheduleTime: any;
     scheduleByTeacherAndDateAndShiftAndScheduleTimeForm: any;
+
+    scheduleByTeacherAndClass: any;
+    scheduleByTeacherAndClassForm: any;
+
+    scheduleByLaboratory: any;
+    scheduleByLaboratoryForm: any;
+
+    scheduleByLaboratoryAndDate: any;
+    scheduleByLaboratoryAndDateForm: any;
+
+    scheduleByClassOfStudents: any;
+    scheduleByClassOfStudentsForm: any;
+
+    scheduleByClassOfStudentsAndDate: any;
+    scheduleByClassOfStudentsAndDateForm: any;
+
+    scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime: any;
+    scheduleByClassOfStudentsAndDateAndShiftAndScheduleTimeForm: any;
+
+    scheduleByClassOfStudentsAndTeacher: any;
+    scheduleByClassOfStudentsAndTeacherForm: any;
 }
 
 class ScheduleCtrl implements IComponentController {
@@ -79,8 +100,38 @@ class ScheduleCtrl implements IComponentController {
 
     private scheduleByTeacherAndDateAndShiftAndScheduleTime: any;
 
+    private scheduleByTeacherAndClass: any;
+
     private initialPage:any;
     private dateInitialPage: any;
+
+    private scheduleByLaboratoryStart: boolean;
+    private pageScheduleByLaboratory: number;
+    private scheduleByLaboratoryData: any;
+    private scheduleByLaboratory: any;
+    private paginationScheduleByLaboratory: any;
+    private paginationFirstScheduleByLaboratory: boolean;
+    private paginationLastScheduleByLaboratory: boolean;
+    private laboratoryScheduleByLaboratory: string;
+
+    private dateScheduleByLaboratoryAndDate: Date;
+    private scheduleByLaboratoryAndDate: any;
+
+    private scheduleByClassOfStudentsStart: boolean;
+    private pageScheduleByClassOfStudents: number;
+    private scheduleByClassOfStudentsData: any;
+    private scheduleByClassOfStudents: any;
+    private paginationScheduleByClassOfStudents: any;
+    private paginationFirstScheduleByClassOfStudents: boolean;
+    private paginationLastScheduleByClassOfStudents: boolean;
+    private classOfStudentsScheduleByClassOfStudents: string;
+
+    private dateScheduleByClassOfStudentsAndDate: Date;
+    private scheduleByClassOfStudentsAndDate: any;
+
+    private scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime: any;
+
+    private scheduleByClassOfStudentsAndTeacher: any;
 
     constructor($scope: IScheduleCtrl, $http: IHttpService) {
         this.scope = $scope;
@@ -92,6 +143,8 @@ class ScheduleCtrl implements IComponentController {
         this.dateScheduleByDateAndShift = new Date;
         this.dateScheduleByDateAndShiftAndScheduleTime = new Date;
         this.dateScheduleByTeacherAndDate = new Date;
+        this.dateScheduleByLaboratoryAndDate = new Date;
+        this.dateScheduleByClassOfStudentsAndDate = new Date;
 
         this.scheduleByShiftStart = false;
         this.pageScheduleByShift = 1;
@@ -114,6 +167,20 @@ class ScheduleCtrl implements IComponentController {
         this.paginationFirstScheduleByTeacher = false;
         this.paginationLastScheduleByTeacher = false;
         this.teacherScheduleByTeacher = "";
+
+        this.scheduleByLaboratoryStart = false;
+        this.pageScheduleByLaboratory = 1;
+        this.paginationScheduleByLaboratory = [];
+        this.paginationFirstScheduleByLaboratory = false;
+        this.paginationLastScheduleByLaboratory = false;
+        this.laboratoryScheduleByLaboratory = "";
+
+        this.scheduleByClassOfStudentsStart = false;
+        this.pageScheduleByClassOfStudents = 1;
+        this.paginationScheduleByClassOfStudents = [];
+        this.paginationFirstScheduleByClassOfStudents = false;
+        this.paginationLastScheduleByClassOfStudents = false;
+        this.classOfStudentsScheduleByClassOfStudents = "";
     }
 
     private selectView(selected: String, page: String) {
@@ -283,7 +350,7 @@ class ScheduleCtrl implements IComponentController {
     }
 
     private viewScheduleByTeacherStart (){
-        this.scheduleByShiftStart = true;
+        this.scheduleByTeacherStart = true;
     }
     private viewScheduleByTeacher(teacher: string) {
         if (this.scheduleByTeacherStart) {
@@ -311,7 +378,7 @@ class ScheduleCtrl implements IComponentController {
             this.scope.scheduleByTeacher = undefined;
             this.scope.scheduleByTeacherForm.$setPristine();
         });
-    };
+    }
     private viewPageNavigationLeftScheduleByTeacher() {
         this.pageScheduleByTeacher -= 1
         this.viewScheduleByTeacher(this.teacherScheduleByTeacher);
@@ -349,7 +416,7 @@ class ScheduleCtrl implements IComponentController {
             this.scope.scheduleByTeacherAndDate = undefined;
             this.scope.scheduleByTeacherAndDateForm.$setPristine();
         });
-    };
+    }
 
     private viewScheduleByTeacherAndDateAndShiftAndScheduleTime(scheduleByTeacherAndDateAndShiftAndScheduleTime:any) {
         let dateScheduleByTeacherAndDateAndShiftAndScheduleTime = scheduleByTeacherAndDateAndShiftAndScheduleTime.date;
@@ -378,13 +445,200 @@ class ScheduleCtrl implements IComponentController {
             this.scope.scheduleByTeacherAndDateAndShiftAndScheduleTime = undefined;
             this.scope.scheduleByTeacherAndDateAndShiftAndScheduleTimeForm.$setPristine();
         });
-    };
+    }
 
+    private viewScheduleByTeacherAndClass(scheduleByTeacherAndClass:any) {
+        let teacherId = scheduleByTeacherAndClass.teacher;
+        let classId = scheduleByTeacherAndClass.class;
+        this.http.get("http://127.0.0.1:8080/schedule/view/teacherAndClass?teacherId="+teacherId+"&classId="+classId).then((res) => {
+            this.scheduleByTeacherAndClass = res.data;
+
+            this.scope.scheduleByTeacherAndClass = undefined;
+            this.scope.scheduleByTeacherAndClassForm.$setPristine();
+        });
+    }
+
+    
+    private viewScheduleByLaboratoryStart (){
+        this.scheduleByLaboratoryStart = true;
+    }
+    private viewScheduleByLaboratory(laboratory: string) {
+        if (this.scheduleByLaboratoryStart) {
+            this.pageScheduleByLaboratory = 1;
+        }
+        
+        this.scheduleByLaboratoryStart = false;
+        this.laboratoryScheduleByLaboratory = laboratory;
+        this.http.get("http://127.0.0.1:8080/schedule/view/laboratory?laboratoryId=" + laboratory + "&page=" + (this.pageScheduleByLaboratory - 1)).then((res) => {
+            this.scheduleByLaboratoryData = res.data;
+            this.scheduleByLaboratory = this.scheduleByLaboratoryData.content;
+
+            this.paginationScheduleByLaboratory = [];
+
+            this.paginationFirstScheduleByLaboratory = this.scheduleByLaboratoryData.first;
+            this.paginationLastScheduleByLaboratory = this.scheduleByLaboratoryData.last;
+
+            for (let index = 1; index <= this.scheduleByLaboratoryData.totalPages; index++) {
+                this.paginationScheduleByLaboratory.push(index);
+            }
+
+            this.paginationScheduleByLaboratory = this.paginationScheduleByLaboratory.slice(this.pageScheduleByLaboratory == 1 ? this.pageScheduleByLaboratory - 1 : this.pageScheduleByLaboratory == 2 ? this.pageScheduleByLaboratory - 2 : this.pageScheduleByLaboratory - 3, this.pageScheduleByLaboratory + 2);
+       
+            this.scope.scheduleByLaboratory = undefined;
+            this.scope.scheduleByLaboratoryForm.$setPristine();
+        });
+    }
+    private viewPageNavigationLeftScheduleByLaboratory() {
+        this.pageScheduleByLaboratory -= 1
+        this.viewScheduleByLaboratory(this.laboratoryScheduleByLaboratory);
+    }
+    private viewPageNavigationRightScheduleByLaboratory() {
+        this.pageScheduleByLaboratory += 1
+        this.viewScheduleByLaboratory(this.laboratoryScheduleByLaboratory);
+    }
+    private viewPageNavigationScheduleByLaboratory(pageScheduleByLaboratory: number) {
+        this.pageScheduleByLaboratory = pageScheduleByLaboratory;
+        this.viewScheduleByLaboratory(this.laboratoryScheduleByLaboratory);
+    }
+
+    private viewScheduleByLaboratoryAndDate(scheduleByLaboratoryAndDate:any) {
+        this.dateScheduleByLaboratoryAndDate = scheduleByLaboratoryAndDate.date;
+        let laboratoryId = scheduleByLaboratoryAndDate.laboratory;
+        let monthString = "";
+        let dayString = "";
+        let day = this.dateScheduleByLaboratoryAndDate.getDate();
+        let month = this.dateScheduleByLaboratoryAndDate.getMonth() + 1;
+        let year = this.dateScheduleByLaboratoryAndDate.getFullYear();
+        if (day < 10){
+            dayString = "0" + day.toString();
+        } else {
+            dayString = day.toString();
+        }
+        if (month < 10) {
+            monthString = "0" + month.toString();
+        } else {
+            monthString = month.toString();
+        }
+        this.http.get("http://127.0.0.1:8080/schedule/view/laboratoryAndDate?date=" + year + "-" + monthString + "-" + dayString + "&laboratoryId="+laboratoryId).then((res) => {
+            this.scheduleByLaboratoryAndDate = res.data;
+
+            this.scope.scheduleByLaboratoryAndDate = undefined;
+            this.scope.scheduleByLaboratoryAndDateForm.$setPristine();
+        });
+    }
+
+    private viewScheduleByClassOfStudentsStart (){
+        this.scheduleByClassOfStudentsStart = true;
+    }
+    private viewScheduleByClassOfStudents(classOfStudents: string) {
+        if (this.scheduleByClassOfStudentsStart) {
+            this.pageScheduleByClassOfStudents = 1;
+        }
+        console.log(classOfStudents);
+        
+        this.scheduleByClassOfStudentsStart = false;
+        this.classOfStudentsScheduleByClassOfStudents = classOfStudents;
+        this.http.get("http://127.0.0.1:8080/schedule/view/class?classId=" + classOfStudents + "&page=" + (this.pageScheduleByClassOfStudents - 1)).then((res) => {
+            this.scheduleByClassOfStudentsData = res.data;
+            this.scheduleByClassOfStudents = this.scheduleByClassOfStudentsData.content;
+
+            this.paginationScheduleByClassOfStudents = [];
+
+            this.paginationFirstScheduleByClassOfStudents = this.scheduleByClassOfStudentsData.first;
+            this.paginationLastScheduleByClassOfStudents = this.scheduleByClassOfStudentsData.last;
+
+            for (let index = 1; index <= this.scheduleByClassOfStudentsData.totalPages; index++) {
+                this.paginationScheduleByClassOfStudents.push(index);
+            }
+
+            this.paginationScheduleByClassOfStudents = this.paginationScheduleByClassOfStudents.slice(this.pageScheduleByClassOfStudents == 1 ? this.pageScheduleByClassOfStudents - 1 : this.pageScheduleByClassOfStudents == 2 ? this.pageScheduleByClassOfStudents - 2 : this.pageScheduleByClassOfStudents - 3, this.pageScheduleByClassOfStudents + 2);
+       
+            this.scope.scheduleByClassOfStudents = undefined;
+            this.scope.scheduleByClassOfStudentsForm.$setPristine();
+        });
+    }
+    private viewPageNavigationLeftScheduleByClassOfStudents() {
+        this.pageScheduleByClassOfStudents -= 1
+        this.viewScheduleByClassOfStudents(this.classOfStudentsScheduleByClassOfStudents);
+    }
+    private viewPageNavigationRightScheduleByClassOfStudents() {
+        this.pageScheduleByClassOfStudents += 1
+        this.viewScheduleByClassOfStudents(this.classOfStudentsScheduleByClassOfStudents);
+    }
+    private viewPageNavigationScheduleByClassOfStudents(pageScheduleByClassOfStudents: number) {
+        this.pageScheduleByClassOfStudents = pageScheduleByClassOfStudents;
+        this.viewScheduleByClassOfStudents(this.classOfStudentsScheduleByClassOfStudents);
+    }
+
+    private viewScheduleByClassOfStudentsAndDate(scheduleByClassOfStudentsAndDate:any) {
+        this.dateScheduleByClassOfStudentsAndDate = scheduleByClassOfStudentsAndDate.date;
+        let classOfStudentsId = scheduleByClassOfStudentsAndDate.classOfStudents;
+        let monthString = "";
+        let dayString = "";
+        let day = this.dateScheduleByClassOfStudentsAndDate.getDate();
+        let month = this.dateScheduleByClassOfStudentsAndDate.getMonth() + 1;
+        let year = this.dateScheduleByClassOfStudentsAndDate.getFullYear();
+        if (day < 10){
+            dayString = "0" + day.toString();
+        } else {
+            dayString = day.toString();
+        }
+        if (month < 10) {
+            monthString = "0" + month.toString();
+        } else {
+            monthString = month.toString();
+        }
+        this.http.get("http://127.0.0.1:8080/schedule/view/classAndDate?date=" + year + "-" + monthString + "-" + dayString + "&classId="+classOfStudentsId).then((res) => {
+            this.scheduleByClassOfStudentsAndDate = res.data;
+
+            this.scope.scheduleByClassOfStudentsAndDate = undefined;
+            this.scope.scheduleByClassOfStudentsAndDateForm.$setPristine();
+        });
+    }
+
+    private viewScheduleByClassOfStudentsAndDateAndShiftAndScheduleTime(scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime:any) {
+        let dateScheduleByClassOfStudentsAndDateAndShiftAndScheduleTime = scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.date;
+        let classOfStudentsId = scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.classOfStudents;
+        let shift = scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.shift;
+        let scheduleTime = scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.scheduleTime;
+
+        let monthString = "";
+        let dayString = "";
+        let day = dateScheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.getDate();
+        let month = dateScheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.getMonth() + 1;
+        let year = dateScheduleByClassOfStudentsAndDateAndShiftAndScheduleTime.getFullYear();
+        if (day < 10){
+            dayString = "0" + day.toString();
+        } else {
+            dayString = day.toString();
+        }
+        if (month < 10) {
+            monthString = "0" + month.toString();
+        } else {
+            monthString = month.toString();
+        }
+        this.http.get("http://127.0.0.1:8080/schedule/view/classAndDateAndShiftAndScheduleTime?date=" + year + "-" + monthString + "-" + dayString + "&classId="+classOfStudentsId+"&shift="+shift+"&scheduleTime="+scheduleTime).then((res) => {
+            this.scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime = res.data;
+
+            this.scope.scheduleByClassOfStudentsAndDateAndShiftAndScheduleTime = undefined;
+            this.scope.scheduleByClassOfStudentsAndDateAndShiftAndScheduleTimeForm.$setPristine();
+        });
+    }
+
+    private viewScheduleByClassOfStudentsAndTeacher(scheduleByClassOfStudentsAndTeacher:any) {
+        let teacherId = scheduleByClassOfStudentsAndTeacher.teacher;
+        let classId = scheduleByClassOfStudentsAndTeacher.class;
+        this.http.get("http://127.0.0.1:8080/schedule/view/teacherAndClass?teacherId="+teacherId+"&classId="+classId).then((res) => {
+            this.scheduleByClassOfStudentsAndTeacher = res.data;
+
+            this.scope.scheduleByClassOfStudentsAndTeacher = undefined;
+            this.scope.scheduleByClassOfStudentsAndTeacherForm.$setPristine();
+        });
+    }
 
     private viewInitialPage() {
         this.http.get("http://127.0.0.1:8080/schedule/view/now").then((res) => {
             this.initialPage = res.data;
-            console.log("Yes");
         });
     };
 
